@@ -6,7 +6,7 @@
 
         <ul class="sidebar-nav">
 
-            <li class="sidebar-item active">
+            <li class="sidebar-item <?= $title == 'Dashboard' ? 'active' : '' ?>">
                 <a class="sidebar-link" href="<?= base_url(); ?>">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                 </a>
@@ -14,7 +14,7 @@
             <li class="sidebar-header">
                 Master
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item <?= $title == 'User' ? 'active' : '' ?>">
                 <a class="sidebar-link" href="#">
                     <i class="align-middle" data-feather="users"></i> <span class="align-middle">User</span>
                 </a>

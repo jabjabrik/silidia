@@ -6,17 +6,19 @@
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
             <li class="nav-item dropdown">
-                <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                <button type="button" class="nav-icon dropdown-toggle d-inline-block d-sm-none" data-bs-toggle="dropdown">
                     <i class="align-middle" data-feather="settings"></i>
-                </a>
+                </button>
 
                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <span class="text-dark">Febri | Sektretaris Camat</span>
+                    <span class="text-dark text-capitalize"><?= $this->session->userdata('nama'); ?> | <?= $this->session->userdata('role'); ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                    <button class="dropdown-item" type="button"><i class="align-middle me-1" data-feather="user"></i> Profile</button>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="<?= base_url('auth/logout'); ?>"><i class="align-middle me-1" data-feather="log-in"></i> Log out</a>
+                    <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout_modal">
+                        <i class="align-middle me-1" data-feather="log-in"></i> Log out
+                    </button>
                 </div>
             </li>
         </ul>
