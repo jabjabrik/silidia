@@ -5,7 +5,6 @@
         </a>
 
         <ul class="sidebar-nav">
-
             <li class="sidebar-item <?= $title == 'Dashboard' ? 'active' : '' ?>">
                 <a class="sidebar-link" href="<?= base_url(); ?>">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
@@ -15,28 +14,28 @@
                 Master
             </li>
             <li class="sidebar-item <?= $title == 'User' ? 'active' : '' ?>">
-                <a class="sidebar-link" href="#">
+                <a class="sidebar-link" href="<?= base_url('user'); ?>">
                     <i class="align-middle" data-feather="users"></i> <span class="align-middle">User</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item <?= $title == 'Kategori' ? 'active' : '' ?>">
                 <a class="sidebar-link" href="#">
-                    <i class="align-middle" data-feather="hash"></i> <span class="align-middle">Kategori</span>
+                    <i class="bi bi-tag"></i> <span class="align-middle">Kategori</span>
                 </a>
             </li>
             <li class="sidebar-header">
-                Pengarsipan
+                Pengarsipan Kelurahan
             </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="#">
-                    <i class="align-middle" data-feather="save"></i> <span class="align-middle">Arsip</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="#">
-                    <i class="align-middle" data-feather="upload-cloud"></i> <span class="align-middle">Upload</span>
-                </a>
-            </li>
+            <?php $role = $this->session->userdata('role'); ?>
+            <?php foreach (['wonoasih', 'jrebengkidul', 'pakistaji', 'kedunggaleng', 'kedungasem', 'sumbertaman'] as $item): ?>
+                <?php if ($role == 'admin' || $role == $item): ?>
+                    <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item) ? 'active' : '' ?>">
+                        <a class="sidebar-link" href="<?= base_url("arsip/kelurahan/$item"); ?>">
+                            <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item; ?></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
             <li class="sidebar-header">
                 Akun
             </li>

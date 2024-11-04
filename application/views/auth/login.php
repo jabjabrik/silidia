@@ -41,6 +41,10 @@
 									<div class="col-12">
 										<label for="password" class="form-label">Password <span class="text-danger">*</span></label>
 										<input type="password" class="form-control" name="password" id="password" value="<?= set_value('password'); ?>">
+										<div style="position: relative;">
+											<i id="eye" hidden class="bi bi-eye" style="position: absolute; right: 10px; top: -27px; cursor: pointer;"></i>
+											<i id="eye" class="bi bi-eye-slash" style="position: absolute; right: 10px; top: -27px; cursor: pointer;"></i>
+										</div>
 										<?= form_error('password', '<small class="text-danger pl-3 mt-1 d-block" style="text-align: left;">', '</small>'); ?>
 									</div>
 									<div class="col-12">
@@ -61,6 +65,10 @@
 			</div>
 		</div>
 	</section>
+
+	<!-- Eye Icon Password -->
+	<?php $this->view('templates/eye_icon_password'); ?>
+	<!-- Eye Icon Password -->
 
 	<!-- Script -->
 	<?php $this->view('templates/script'); ?>

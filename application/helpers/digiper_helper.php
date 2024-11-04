@@ -21,15 +21,6 @@ function dd($data)
     die();
 }
 
-function set_alert($message, $color)
-{
-    $CI = get_instance();
-    $params = array(
-        'message' => $message,
-        'color' => $color
-    );
-    $CI->session->set_flashdata('alert', $params);
-}
 
 function set_toasts($message, $color)
 {
@@ -39,4 +30,24 @@ function set_toasts($message, $color)
         'color' => $color
     );
     $CI->session->set_flashdata('toasts', $params);
+}
+
+function upload_file($file_upload)
+{
+    $CI = get_instance();
+    $file_name = $_FILES[$file_upload]['name'];
+    // $ext = pathinfo($_FILES[$file_upload]['name'], PATHINFO_EXTENSION);
+
+    $config['upload_path'] = "./dokumen/";
+    $config['file_name'] = time() . "_" . $file_name;
+    $config['allowed_types'] = '*';
+    $config['file_ext_tolower'] = TRUE;
+
+    $CI->upload->initialize($config);
+    if (!$CI->upload->do_upload($file_upload)) {
+        var_dump($CI->upload->display_errors());
+        die();
+    } else {
+        return $CI->upload->data()['file_name'];
+    }
 }

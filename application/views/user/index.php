@@ -28,8 +28,8 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Username</th>
                                                 <th>Nama</th>
+                                                <th>Username</th>
                                                 <th class="no-sort">Password</th>
                                                 <th>Role</th>
                                                 <th class="no-sort">Aksi</th>
@@ -40,8 +40,8 @@
                                             <?php foreach ($user as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
-                                                    <td class="text-lowercase"><?= $item->username ?></td>
                                                     <td><?= $item->nama ?></td>
+                                                    <td class="text-lowercase"><?= $item->username ?></td>
                                                     <td>...</td>
                                                     <td><?= $item->role ?></td>
                                                     <td>
