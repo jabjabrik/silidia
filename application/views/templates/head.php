@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/favicon/favicon-16x16.png'); ?>">
 <link rel="manifest" href="<?= base_url('assets/favicon/site.webmanifest'); ?>">
 
-<title>DIGIPER | <?= $title ?></title>
+<title>SILIDIA | <?= $title ?></title>
 
 <!-- FONT -->
 <link rel="preconnect" href="https://fonts.gstatic.com">

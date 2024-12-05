@@ -18,114 +18,63 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1 class="h3 mb-3"><strong>Dashboard</strong> Pengarsipan Digital</h1>
+                    <?php if ($role == 'admin' || $role == 'validator'): ?>
+                        <h1 class="h3 mb-3"><strong>Dashboard</strong> Pengarsipan Kelurahan</h1>
+                        <div class="row g-3">
+                            <?php foreach ($kelurahan_arsip as $index => $item): ?>
+                                <?php $color = ['primary', 'success', 'warning'][($index + 1) % 3]; ?>
+                                <?php $kelurahan = ['wonoasih', 'jrebengkidul', 'pakistaji', 'kedunggaleng', 'kedungasem', 'sumbertaman']; ?>
+                                <div class="px-3 col-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col mt-0">
+                                                    <a href="<?= base_url("arsip/kelurahan/" . $kelurahan[$index]); ?>" class="card-title text-capitalize"><?= $kelurahan[$index] ?></a>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="stat text-<?= $color; ?>">
+                                                        <i class="bi bi-hash"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h1 class="mt-1 mb-3"><?= $item->total ?></h1>
+                                            <div class="mb-0">
+                                                <span class="text-<?= $color; ?>"> <i class="mdi bi bi-stickies-fill"></i></span>
+                                                <span class="text-muted"> Total Arsip <?= $item->nama ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
+                    <h1 class="h3 my-3"><strong>Dashboard</strong> Pengarsipan Kategori</h1>
                     <div class="row g-3">
-                        <div class="px-3 col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <a href="#" class="card-title"> Dokumen Administrasi</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle bi bi-person-vcard"></i>
+                        <?php foreach ($kategori_arsip as $index => $item): ?>
+                            <?php $color = ['primary', 'success', 'warning'][($index + 1) % 3]; ?>
+                            <div class="px-3 col-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <span class="card-title text-capitalize"><?= $item->nama_kategori ?></span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="stat text-<?= $color; ?>">
+                                                    <i class="bi bi-tag"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">102</h1>
-                                    <div class="mb-0">
-                                        <span class="text-primary"> <i class="mdi bi bi-stickies-fill"></i></span>
-                                        <span class="text-muted"> Total Dokumen Administrasi</span>
+                                        <h1 class="mt-1 mb-3"><?= $item->total ?></h1>
+                                        <div class="mb-0">
+                                            <span class="text-<?= $color; ?>"> <i class="mdi bi bi-stickies-fill"></i></span>
+                                            <span class="text-muted"> Total Arsip <?= $item->nama_kategori ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="px-3 col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <a href="#" class="card-title"> Dokumen Hukum</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="stat text-success">
-                                                <i class="align-middle bi bi-award"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">321</h1>
-                                    <div class="mb-0">
-                                        <span class="text-success"> <i class="mdi bi bi-stickies-fill"></i></span>
-                                        <span class="text-muted"> Total Dokumen Hukum</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-3 col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <a href="#" class="card-title"> Dokumen Proyek</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="stat text-warning">
-                                                <i class="align-middle bi bi-building"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">257</h1>
-                                    <div class="mb-0">
-                                        <span class="text-warning"> <i class="mdi bi bi-stickies-fill"></i></span>
-                                        <span class="text-muted"> Total Dokumen Proyek</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-3 col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <a href="#" class="card-title"> Dokumen Pendidikan</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle bi bi-lightbulb-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">257</h1>
-                                    <div class="mb-0">
-                                        <span class="text-primary"> <i class="mdi bi bi-stickies-fill"></i></span>
-                                        <span class="text-muted"> Total Dokumen Pendidikan</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-3 col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <a href="#" class="card-title"> Dokumen Slip Gaji</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="stat text-success">
-                                                <i class="align-middle bi bi-cash-stack"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">191</h1>
-                                    <div class="mb-0">
-                                        <span class="text-success"> <i class="mdi bi bi-stickies-fill"></i></span>
-                                        <span class="text-muted"> Total Dokumen Slip Gaji</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </main>
@@ -135,6 +84,10 @@
     <!-- Script -->
     <?php $this->view('templates/script'); ?>
     <!-- EndScript -->
+
+    <!-- Logout Modal  -->
+    <?php $this->view('templates/logout_modal'); ?>
+    <!-- End Logout Modal  -->
 </body>
 
 </html>

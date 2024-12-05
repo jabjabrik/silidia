@@ -37,7 +37,7 @@
                                         </thead>
                                         <tbody>
                                             <?php $no = 1 ?>
-                                            <?php foreach ($user as $item) : ?>
+                                            <?php foreach ($data_result as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
                                                     <td><?= $item->nama ?></td>
@@ -45,9 +45,9 @@
                                                     <td>...</td>
                                                     <td><?= $item->role ?></td>
                                                     <td>
-                                                        <?php $params = "$item->id_user,$item->nama,$item->username" ?>
-                                                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('<?= $params ?>')">
+                                                        <?php $params = "[`$item->id_user`, `$item->nama`, `$item->username`]" ?>
+                                                        <div class="btn-group btn-group-sm" role="group">
+                                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm(<?= $params ?>)">
                                                                 <i class="bi bi-pencil-square"></i> Edit
                                                             </button>
                                                         </div>
@@ -109,28 +109,15 @@
     </div>
     <!-- End Modal Form -->
 
-
-
-
     <!-- Script Modal Form -->
     <script>
-        const id_user = document.querySelector('#id_user')
-        const nama = document.querySelector('#nama')
-        const username = document.querySelector('#username')
-        const password = document.querySelector('#password')
-
-        const clearForm = () => {
-            id_user.value = '';
-            nama.value = '';
-            username.value = '';
-        }
-
+        const modal_form = document.querySelector('#modal_form');
         const setForm = (data) => {
-            clearForm();
-            const user = data.split(',')
-            id_user.value = user[0]
-            nama.value = user[1]
-            username.value = user[2]
+            const fields = ['id_user', 'nama', 'username'];
+            fields.forEach((e, i) => {
+                const element = modal_form.querySelector(`#${e}`);
+                element.value = data[i];
+            })
         }
     </script>
     <!-- End Script Modal Form -->

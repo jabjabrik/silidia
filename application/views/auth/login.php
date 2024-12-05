@@ -18,7 +18,7 @@
 								<img class="img-fluid rounded mb-3" loading="lazy" src="<?= base_url('assets/img/logo_pemkot.png') ?>" width="130" alt=" BootstrapBrain Logo">
 								<hr class="border-primary-subtle mb-3">
 								<h3 class="h3 mb-4" style="color: aliceblue;">Selamat Datang di Sistem Pengarsipan Kecamatan Wonoasih</h3>
-								<p class="lead m-0" style="font-size: 1em; color: aliceblue;">Aplikasi Digital Pengarsipan (DIGIPER) dirancang khusus untuk mendukung pengelolaan arsip di lingkungan Kecamatan secara digital, cepat, dan aman.</p>
+								<p class="lead m-0" style="font-size: 1em; color: aliceblue;">Aplikasi Sistem Informasi Arsip Digital Alih Media (SILIDIA) dirancang khusus untuk mendukung pengelolaan arsip di lingkungan Kecamatan secara digital, cepat, dan aman.</p>
 							</div>
 						</div>
 					</div>
