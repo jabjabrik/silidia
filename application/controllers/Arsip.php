@@ -77,7 +77,6 @@ class Arsip extends CI_Controller
 		$id_arsip = $this->input->post('id_arsip');
 
 		$data = [
-			'id_user'      => trim($this->session->userdata('id_user', true)),
 			'id_kategori'  => trim($this->input->post('id_kategori', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
