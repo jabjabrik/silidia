@@ -30,7 +30,7 @@
             </li>
             <?php $role = $this->session->userdata('role'); ?>
             <?php foreach (['wonoasih', 'jrebengkidul', 'pakistaji', 'kedunggaleng', 'kedungasem', 'sumbertaman'] as $item): ?>
-                <?php if ($role == 'admin' || $role == $item): ?>
+                <?php if ($role == 'admin' || $role == 'validator' || $role == $item): ?>
                     <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item) ? 'active' : '' ?>">
                         <a class="sidebar-link" href="<?= base_url("arsip/kelurahan/$item"); ?>">
                             <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item; ?></span>

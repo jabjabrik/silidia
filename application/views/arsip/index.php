@@ -20,12 +20,12 @@
                         <i class="bi bi-archive"></i>
                         Halaman Manajemen Arsip Kelurahan <?= $kelurahan ?>
                     </h1>
-                    <?php if ($role != 'admin'): ?>
+                    <?php if ($role != 'admin' && $role != 'validator'): ?>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
                             <i class="bi bi-plus-circle"></i> Tambah
                         </button>
                     <?php endif ?>
-                    <?php if (!empty($year_arsip)): ?>
+                    <?php if (!empty($year_arsip) && $role == 'admin'): ?>
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 Cetak Laporan
@@ -53,7 +53,7 @@
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
-                                                <?php if ($role == 'admin'): ?>
+                                                <?php if ($role == 'admin' || $role == 'validator'): ?>
                                                     <th class="no-sort">Validasi</th>
                                                 <?php endif ?>
                                             </tr>
@@ -90,7 +90,7 @@
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
-                                                            <?php if (!(bool)$item->status_validasi): ?>
+                                                            <?php if (!(bool)$item->status_validasi && $role != 'validator'): ?>
                                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                     <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
                                                                 </button>
@@ -102,7 +102,7 @@
                                                             <?php endif ?>
                                                         </div>
                                                     </td>
-                                                    <?php if ($role == 'admin'): ?>
+                                                    <?php if ($role == 'admin' || $role == 'validator'): ?>
                                                         <td class="text-center">
                                                             <?php if ((bool)$item->status_validasi): ?>
                                                                 <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">

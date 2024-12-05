@@ -28,7 +28,7 @@ class Arsip extends CI_Controller
 
 		$role = $this->session->userdata('role');
 
-		if ($kelurahan != $role && $role != 'admin') {
+		if ($kelurahan != $role && $role != 'admin' && $role != 'validator') {
 			redirect("arsip/kelurahan/$role", 'refresh');
 		}
 
@@ -83,7 +83,7 @@ class Arsip extends CI_Controller
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
 		];
 
-		$file_path = $this->arsip_model->get_by_id($id_arsip)->row('file_path');
+		$file_path = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip)->file_path;
 
 		if ($_FILES['dokumen']['name']) {
 			unlink("./dokumen/$file_path");
@@ -101,14 +101,16 @@ class Arsip extends CI_Controller
 			show_404();
 		}
 
-		$arsip = $this->arsip_model->get_by_id($id_arsip);
+		// $arsip = $this->arsip_model->get_by_id($id_arsip);
+		$arsip = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip);
 
-		if ((bool)$arsip->row('status_validasi')) {
+
+		if ((bool)$arsip->status_validasi) {
 			set_toasts('Tidak dapat menghapus Arsip yang telah tervalidasi.', 'danger');
 			redirect("arsip/kelurahan/$kelurahan");
 		}
 
-		unlink("./dokumen/" . $arsip->row('file_path'));
+		unlink("./dokumen/" . $arsip->file_path);
 
 
 		$this->base_model->delete('arsip', $id_arsip);

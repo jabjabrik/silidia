@@ -19,7 +19,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
                     <?php if ($role == 'admin' || $role == 'validator'): ?>
-                        <h1 class="h3 mb-3"><strong>Dashboard</strong> Pengarsipan Kelurahan</h1>
+                        <h1 class="h3 mb-3"><strong>Informasi</strong> Pengarsipan Kelurahan</h1>
                         <div class="row g-3">
                             <?php foreach ($kelurahan_arsip as $index => $item): ?>
                                 <?php $color = ['primary', 'success', 'warning'][($index + 1) % 3]; ?>
@@ -49,7 +49,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <h1 class="h3 my-3"><strong>Dashboard</strong> Pengarsipan Kategori</h1>
+                    <h1 class="h3 my-3"><strong>Informasi</strong> Kategori Pengarsipan <?= $role != 'admin' && $role != 'validator' ? "Kelurahan $role" : ''; ?></h1>
                     <div class="row g-3">
                         <?php foreach ($kategori_arsip as $index => $item): ?>
                             <?php $color = ['primary', 'success', 'warning'][($index + 1) % 3]; ?>
