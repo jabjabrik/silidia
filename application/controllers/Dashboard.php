@@ -13,9 +13,14 @@ class Dashboard extends CI_Controller
     public function index()
     {
         $data['title'] = 'Dashboard';
-        $data['role'] = $this->session->userdata('role');
-        $data['kelurahan_arsip'] = $this->dashboard_model->get_total_kelurahan_arsip();
-        $data['kategori_arsip'] = $this->dashboard_model->get_total_kategori_arsip($data['role']);
+        $role = $this->session->userdata('role');
+        $sub_role = $this->session->userdata('sub_role');
+        $data['role'] = $role;
+        $data['sub_role'] = $sub_role;
+        $data['kecamatan_arsip'] = $this->dashboard_model->get_total_arsip('kecamatan');
+        $data['kelurahan_arsip'] = $this->dashboard_model->get_total_arsip('kelurahan');
+
+        $data['kategori_arsip'] = $this->dashboard_model->get_total_kategori_arsip($sub_role);
 
         $this->load->view('dashboard/index', $data);
     }

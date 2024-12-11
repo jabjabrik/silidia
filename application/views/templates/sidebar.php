@@ -3,7 +3,6 @@
         <a class="sidebar-brand" href="<?= base_url(); ?>">
             <span class="align-middle">SILIDIA</span>
         </a>
-
         <ul class="sidebar-nav">
             <li class="sidebar-item <?= $title == 'Dashboard' ? 'active' : '' ?>">
                 <a class="sidebar-link" href="<?= base_url(); ?>">
@@ -25,19 +24,36 @@
                     </a>
                 </li>
             <?php endif; ?>
-            <li class="sidebar-header">
-                Pengarsipan Kelurahan
-            </li>
-            <?php $role = $this->session->userdata('role'); ?>
-            <?php foreach (['wonoasih', 'jrebengkidul', 'pakistaji', 'kedunggaleng', 'kedungasem', 'sumbertaman'] as $item): ?>
-                <?php if ($role == 'admin' || $role == 'validator' || $role == $item): ?>
-                    <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item) ? 'active' : '' ?>">
-                        <a class="sidebar-link" href="<?= base_url("arsip/kelurahan/$item"); ?>">
-                            <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item; ?></span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
+            <?php if ($this->session->userdata('role') != 'kelurahan'): ?>
+                <li class="sidebar-header">
+                    Pengarsipan Kecamatan
+                </li>
+                <?php $sub_role = $this->session->userdata('sub_role'); ?>
+                <?php foreach (get_role_kecamatan_kelurahan('kecamatan') as $item): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == $item->sub_role): ?>
+                        <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item->sub_role) ? 'active' : '' ?>">
+                            <a class="sidebar-link" href="<?= base_url("arsip?id=$item->id_user"); ?>">
+                                <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item->sub_role; ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if ($this->session->userdata('role') != 'kecamatan'): ?>
+                <li class="sidebar-header">
+                    Pengarsipan Kelurahan
+                </li>
+                <?php $sub_role = $this->session->userdata('sub_role'); ?>
+                <?php foreach (get_role_kecamatan_kelurahan('kelurahan') as $item): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == $item->sub_role): ?>
+                        <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item->sub_role) ? 'active' : '' ?>">
+                            <a class="sidebar-link" href="<?= base_url("arsip?id=$item->id_user"); ?>">
+                                <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item->sub_role; ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
             <li class="sidebar-header">
                 Akun
             </li>

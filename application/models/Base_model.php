@@ -4,9 +4,8 @@ class Base_model extends CI_Model
 {
     public function get_all(string $table_name): array
     {
-        $query = "SELECT * FROM $table_name";
-        $result = $this->db->query($query);
-        return $result->result();
+        $result = $this->db->get($table_name)->result();
+        return $result;
     }
 
     public function insert(string $table_name, array $data): void
@@ -22,8 +21,8 @@ class Base_model extends CI_Model
 
     public function delete(string $table_name, string $id): void
     {
-        $query = "DELETE FROM $table_name WHERE id_$table_name = '$id'";
-        $this->db->query($query);
+        $this->db->where("id_$table_name", $id);
+        $this->db->delete($table_name);
     }
 
     public function get_one_data_by(string $table_name, string $field, string $value)

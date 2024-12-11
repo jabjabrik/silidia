@@ -30,7 +30,6 @@
                                                 <th>No</th>
                                                 <th>Nama</th>
                                                 <th>Username</th>
-                                                <th class="no-sort">Password</th>
                                                 <th>Role</th>
                                                 <th class="no-sort">Aksi</th>
                                             </tr>
@@ -40,12 +39,11 @@
                                             <?php foreach ($data_result as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
-                                                    <td><?= $item->nama ?></td>
+                                                    <td><?= $item->nama_user ?></td>
                                                     <td class="text-lowercase"><?= $item->username ?></td>
-                                                    <td>...</td>
-                                                    <td><?= $item->role ?></td>
+                                                    <td><?= $item->sub_role ?></td>
                                                     <td>
-                                                        <?php $params = "[`$item->id_user`, `$item->nama`, `$item->username`]" ?>
+                                                        <?php $params = "[`$item->id_user`, `$item->nama_user`, `$item->username`]" ?>
                                                         <div class="btn-group btn-group-sm" role="group">
                                                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm(<?= $params ?>)">
                                                                 <i class="bi bi-pencil-square"></i> Edit
@@ -79,8 +77,8 @@
                         <div class="row g-3">
                             <input type="text" name="id_user" id="id_user" hidden>
                             <div class="form-group col-md-6 col-12">
-                                <label for="nama" class="form-label">Nama Lengkap</label>
-                                <input type="text" name="nama" id="nama" class="form-control" required>
+                                <label for="nama_user" class="form-label">Nama </label>
+                                <input type="text" name="nama_user" id="nama_user" class="form-control" required>
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label for="username" class="form-label">Username</label>
@@ -88,7 +86,7 @@
                                 <div class="form-text">Panjang Username Minimal 8 Karakter</div>
                             </div>
                             <div class="form-group col-md-6 col-12">
-                                <label for="password" class="form-label">Masukan Password</label>
+                                <label for="password" class="form-label">Ubah Password</label>
                                 <input type="password" name="password" id="password" class="form-control">
                                 <div style="position: relative;">
                                     <i id="eye" hidden class="bi bi-eye" style="position: absolute; right: 10px; top: -30px; cursor: pointer;"></i>
@@ -113,7 +111,7 @@
     <script>
         const modal_form = document.querySelector('#modal_form');
         const setForm = (data) => {
-            const fields = ['id_user', 'nama', 'username'];
+            const fields = ['id_user', 'nama_user', 'username'];
             fields.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
                 element.value = data[i];

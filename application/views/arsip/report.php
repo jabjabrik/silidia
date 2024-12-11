@@ -14,7 +14,6 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            /* margin: 20px 0; */
         }
 
         table th {
@@ -44,7 +43,7 @@
 </head>
 
 <body>
-    <h2>Laporan Pengarsipan Kelurahan <?= $kelurahan ?> Tahun <?= $tahun ?></h2>
+    <h2>Laporan Pengarsipan <?= $role ?> <?= $sub_role ?> Tahun <?= $tahun ?></h2>
 
     <table>
         <thead>
@@ -61,7 +60,7 @@
                 <?php $no = 1;
                 foreach ($data_result as $item): ?>
                     <tr>
-                        <td><?php echo $no++; ?></td>
+                        <td><?= $no++; ?></td>
                         <td><?= $item->nama_dokumen; ?></td>
                         <td style="white-space: nowrap;"><?= date('d-m-Y', strtotime($item->created_at)); ?></td>
                         <td style="white-space: nowrap;"><?= $item->nama_kategori; ?></td>

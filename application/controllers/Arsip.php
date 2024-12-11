@@ -3,13 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Arsip extends CI_Controller
 {
-	private $service_name;
-
 	public function __construct()
 	{
 		parent::__construct();
 		is_logged_in();
-		$this->service_name = 'kategori';
 		$this->load->model('arsip_model');
 		$this->load->model('base_model');
 		$this->load->library('Dompdf_lib');
@@ -17,27 +14,32 @@ class Arsip extends CI_Controller
 
 	public function index()
 	{
-		redirect("$this->service_name/kelurahan", 'refresh');
-	}
-
-	public function kelurahan($kelurahan = null)
-	{
-		if (!(bool)$kelurahan) {
-			redirect('arsip/kelurahan/wonoasih', 'refresh');
+		$id_user = htmlspecialchars($this->input->get('id', TRUE));
+		if (!(bool)$id_user) {
+			show_404();
 		}
 
+		$is_exist = !is_null($this->base_model->get_one_data_by('user', 'id_user', $id_user));
+
+		if (!$is_exist || $id_user == '1' || $id_user == '2') show_404();
+
+		$id_user_session = $this->session->userdata('id_user');
 		$role = $this->session->userdata('role');
 
-		if ($kelurahan != $role && $role != 'admin' && $role != 'validator') {
-			redirect("arsip/kelurahan/$role", 'refresh');
+		if ($id_user_session != $id_user && $role != 'admin' && $role != 'validator') {
+			redirect("arsip?id=$id_user_session", 'refresh');
 		}
 
-		$data['data_result'] = $this->arsip_model->get_arsip_by_kelurahan($kelurahan);
-		$data['year_arsip']  = $this->arsip_model->get_year_arsip($kelurahan);
-		$data['title'] 		 = 'Arsip ' . ucfirst($kelurahan);
-		$data['role']  		 = $this->session->userdata('role');
+		$data['data_result'] = $this->arsip_model->get_arsip($id_user);
+		$data['year_arsip']  = $this->arsip_model->get_year_arsip($id_user);
+
+		$data['session_role']  		 = $this->session->userdata('role');
+		$data['role']    = $data['data_result'][0]->role;
+		$data['sub_role']    = $data['data_result'][0]->sub_role;
+
+		$data['title'] 		 = 'Arsip ' . ucfirst($data['sub_role']);
 		$data['kategori']    = $this->base_model->get_all('kategori');
-		$data['kelurahan']   = $kelurahan;
+		$data['id_user']   = $id_user;
 
 		$this->load->view('arsip/index', $data);
 	}
@@ -45,13 +47,13 @@ class Arsip extends CI_Controller
 	public function insert()
 	{
 		if ($this->input->server('REQUEST_METHOD') !== 'POST') {
-			redirect('arsip/kelurahan');
+			show_404();
 		}
 
-		$kelurahan    = trim($this->input->post('kelurahan', true));
+		$id_user = trim($this->input->post('id_user', true));
 
 		$data = [
-			'id_user'      => trim($this->session->userdata('id_user', true)),
+			'id_user'      => $id_user,
 			'id_kategori'  => trim($this->input->post('id_kategori', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
@@ -62,18 +64,16 @@ class Arsip extends CI_Controller
 
 		$this->base_model->insert('arsip', $data);
 		set_toasts('Data arsip berhasil disimpan', 'success');
-		redirect("arsip/kelurahan/$kelurahan", 'refresh');
+		redirect("arsip?id=$id_user", 'refresh');
 	}
 
 	public function edit()
 	{
 		if ($this->input->server('REQUEST_METHOD') !== 'POST') {
-			redirect('pemilihan');
+			show_404();
 		}
 
-		$this->load->library('upload');
-
-		$kelurahan = $this->input->post('kelurahan');
+		$id_user = $this->input->post('id_user');
 		$id_arsip = $this->input->post('id_arsip');
 
 		$data = [
@@ -84,6 +84,7 @@ class Arsip extends CI_Controller
 
 		$file_path = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip)->file_path;
 
+		$this->load->library('upload');
 		if ($_FILES['dokumen']['name']) {
 			unlink("./dokumen/$file_path");
 			$data['file_path'] = upload_file('dokumen');
@@ -91,72 +92,74 @@ class Arsip extends CI_Controller
 
 		$this->base_model->update('arsip', $data, $id_arsip);
 		set_toasts('Data arsip berhasil diupdate', 'success');
-		redirect("arsip/kelurahan/$kelurahan", 'refresh');
+		redirect("arsip?id=$id_user", 'refresh');
 	}
 
-	public function delete($kelurahan = null, $id_arsip = null)
+	public function delete($id_user = null, $id_arsip = null)
 	{
-		if (is_null($kelurahan) || is_null($id_arsip)) {
+		if (is_null($id_user) || is_null($id_arsip)) {
 			show_404();
 		}
 
-		// $arsip = $this->arsip_model->get_by_id($id_arsip);
 		$arsip = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip);
 
+		$is_exist = (bool)$this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip);
+
+		if (!$is_exist) {
+			set_toasts('Data arsip tidak ditemukan.', 'danger');
+			redirect("arsip?id=$id_user", 'refresh');
+		}
 
 		if ((bool)$arsip->status_validasi) {
 			set_toasts('Tidak dapat menghapus Arsip yang telah tervalidasi.', 'danger');
-			redirect("arsip/kelurahan/$kelurahan");
+			redirect("arsip?id=$id_user", 'refresh');
 		}
 
 		unlink("./dokumen/" . $arsip->file_path);
 
-
 		$this->base_model->delete('arsip', $id_arsip);
 		set_toasts('Data arsip berhasil dihapus', 'success');
-		redirect("arsip/kelurahan/$kelurahan", 'refresh');
+		redirect("arsip?id=$id_user", 'refresh');
 	}
 
-	public function validate($type = null, $id_arsip = null, $kelurahan = null)
+	public function validate($type = null, $id_arsip = null, $id_user = null)
 	{
-		if (is_null($type) || is_null($id_arsip) || is_null($kelurahan)) {
+		if (is_null($type) || is_null($id_arsip) || is_null($id_user)) {
 			show_404();
 		}
 
-		if (!($type == 'approve') && !($type == 'cancel')) {
+		if ($type != 'approve' && $type != 'cancel') {
 			show_404();
 		}
 
-		$is_exist = !is_null($this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip));
+		$is_exist = (bool)$this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip);
 
 		if (!$is_exist) {
-			show_404();
+			set_toasts('Data arsip tidak ditemukan.', 'danger');
+			redirect("arsip?id=$id_user", 'refresh');
 		}
 
 		$status_validasi = $type == 'approve' ? 1 : 0;
 
-		$result = $this->arsip_model->validate_arsip($id_arsip, $status_validasi);
+		$this->base_model->update('arsip', ['status_validasi' => $status_validasi], $id_arsip);
 
-		if ($result['status']) {
-			set_toasts($result['message'], 'success');
-		} else {
-			set_toasts($result['message'], 'danger');
-		}
-
-		redirect("arsip/kelurahan/$kelurahan", 'refresh');
+		$msg = $status_validasi == 1 ? "Data Arsip Berhasil di Validasi" : "Pembatalan Validasi Berhasil";
+		set_toasts($msg, 'success');
+		redirect("arsip?id=$id_user", 'refresh');
 	}
 
-	public function report($kelurahan = null, $tahun = null)
+	public function report($id_user = null, $tahun = null)
 	{
-
-		if (is_null($kelurahan) || is_null($tahun)) {
+		if (is_null($id_user) || is_null($tahun)) {
 			show_404();
 		}
 
-		$data['data_result'] = $this->arsip_model->get_arsip_by_kelurahan_report('wonoasih', $tahun);
-		$data['kelurahan'] = $kelurahan;
+		$data['data_result'] = $this->arsip_model->get_arsip_report($id_user, $tahun);
+		$data['role'] = $data['data_result'][0]->role;
+		$data['sub_role'] = $data['data_result'][0]->sub_role;
 		$data['tahun'] = $tahun;
-		$html = $this->load->view('arsip/report', $data, true);
+
+		$html = $this->load->view('arsip/report', $data, TRUE);
 
 		// Atur DOMPDF
 		$this->dompdf_lib->loadHtml($html);
@@ -164,6 +167,6 @@ class Arsip extends CI_Controller
 		$this->dompdf_lib->render();
 
 		// Output file PDF
-		$this->dompdf_lib->stream("laporan-kel-$kelurahan-$tahun.pdf", array("Attachment" => 0));
+		$this->dompdf_lib->stream("laporan-" . $data['role'] . "-" . $data['sub_role'] . "-$tahun.pdf", array("Attachment" => 0));
 	}
 }

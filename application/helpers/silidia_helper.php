@@ -8,6 +8,13 @@ function is_logged_in()
     }
 }
 
+function get_role_kecamatan_kelurahan($role): array
+{
+    $query = "SELECT user.id_user, user.sub_role FROM user WHERE user.role = '$role'";
+    $CI = &get_instance();
+    return $CI->db->query($query)->result();
+}
+
 function authorize($_role = 'admin')
 {
     $CI = &get_instance();

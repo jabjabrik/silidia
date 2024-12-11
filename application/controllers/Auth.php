@@ -7,6 +7,7 @@ class Auth extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
+		$this->load->model('base_model');
 	}
 
 	public function index()
@@ -33,10 +34,9 @@ class Auth extends CI_Controller
 			return FALSE;
 		}
 
-		$this->db->where('username', $username);
-		$query = $this->db->get('user');
+		$user = $this->base_model->get_one_data_by('user', 'username', $username);
 
-		if ($query->num_rows() === 0) {
+		if (is_null($user)) {
 			$this->form_validation->set_message('validate_username', 'Username tidak ditemukan');
 			return FALSE;
 		}
@@ -51,15 +51,12 @@ class Auth extends CI_Controller
 		}
 
 		$username = $this->input->post('username');
-		$this->db->where('username', $username);
-		$query = $this->db->get('user');
+		$user = $this->base_model->get_one_data_by('user', 'username', $username);
 
-		if ($query->num_rows() == 0) {
+		if (is_null($user)) {
 			$this->form_validation->set_message('validate_password', '');
 			return FALSE;
 		}
-
-		$user = $query->row();
 
 		if (!password_verify($password, $user->password)) {
 			$this->form_validation->set_message('validate_password', 'Password salah');
@@ -71,14 +68,17 @@ class Auth extends CI_Controller
 
 	private function _login($username)
 	{
-		$user     = $this->db->get_where('user', ['username' => $username])->row();
+		$user = $this->base_model->get_one_data_by('user', 'username', $username);
+
 		$data = [
-			'username' => $user->username,
-			'role'     => $user->role,
-			'nama'     => $user->nama,
-			'id_user'     => $user->id_user,
-			'is_login' => true,
+			'id_user'  	=> $user->id_user,
+			'username' 	=> $user->username,
+			'nama_user' => $user->nama_user,
+			'role'      => $user->role,
+			'sub_role'  => $user->sub_role,
+			'is_login'  => TRUE,
 		];
+
 		$this->session->set_userdata($data);
 		redirect('dashboard');
 	}
@@ -86,6 +86,6 @@ class Auth extends CI_Controller
 	public function logout()
 	{
 		$this->session->sess_destroy();
-		redirect('/');
+		redirect();
 	}
 }

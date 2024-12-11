@@ -58,10 +58,18 @@ class Kategori extends CI_Controller
 		redirect($this->service_name, 'refresh');
 	}
 
-	public function delete($id = null)
+	public function delete($id_kategori = null)
 	{
-		if (is_null($id)) show_404();
-		$this->base_model->delete($this->service_name, $id);
+		if (is_null($id_kategori)) show_404();
+
+		$is_exist = !is_null($this->base_model->get_one_data_by('arsip', 'id_kategori', $id_kategori));
+
+		if ($is_exist) {
+			set_toasts("Kategori tidak dapat dihapus dikarenakan kategori telah terpakai oleh data arsip", 'danger');
+			redirect($this->service_name, 'refresh');
+		}
+
+		$this->base_model->delete($this->service_name, $id_kategori);
 		set_toasts("Data $this->service_name berhasil di Hapus", 'success');
 		redirect($this->service_name, 'refresh');
 	}

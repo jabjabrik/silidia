@@ -3,13 +3,14 @@
 
 class Arsip_model extends CI_Model
 {
-    public function get_arsip_by_kelurahan(string $kelurahan): array
+    public function get_arsip(string $id_user): array
     {
 
-        $query = "SELECT arsip.*, user.role AS kelurahan, kategori.nama_kategori FROM arsip 
+        $query = "SELECT arsip.*, user.role, user.sub_role, kategori.nama_kategori 
+        FROM arsip 
         JOIN user ON arsip.id_user = user.id_user 
         JOIN kategori ON arsip.id_kategori = kategori.id_kategori
-        WHERE user.role = '$kelurahan'
+        WHERE user.id_user = '$id_user'
         ORDER BY arsip.status_validasi DESC, arsip.id_arsip DESC";
 
         $result = $this->db->query($query)->result();
@@ -33,23 +34,23 @@ class Arsip_model extends CI_Model
     }
 
 
-    public function get_year_arsip($kelurahan): array
+    public function get_year_arsip($id_user): array
     {
         $query = "SELECT DISTINCT YEAR(arsip.created_at) AS tahun FROM arsip
         JOIN user ON arsip.id_user = user.id_user 
-        WHERE user.role = '$kelurahan' AND arsip.status_validasi = '1'
+        WHERE user.id_user = '$id_user' AND arsip.status_validasi = '1'
         ORDER BY arsip.created_at";
         $result = $this->db->query($query)->result();
         return $result;
     }
 
-    public function get_arsip_by_kelurahan_report(string $kelurahan, int $tahun): array
+    public function get_arsip_report(string $id_user, int $tahun): array
     {
-
-        $query = "SELECT arsip.*, user.role AS kelurahan, kategori.nama_kategori FROM arsip 
+        $query = "SELECT arsip.*, user.role, user.sub_role, kategori.nama_kategori 
+        FROM arsip 
         JOIN user ON arsip.id_user = user.id_user 
         JOIN kategori ON arsip.id_kategori = kategori.id_kategori
-        WHERE user.role = '$kelurahan' AND YEAR(arsip.created_at) = $tahun AND arsip.status_validasi = '1'";
+        WHERE user.id_user = '$id_user' AND YEAR(arsip.created_at) = $tahun AND arsip.status_validasi = '1'";
 
         $result = $this->db->query($query)->result();
         return $result;

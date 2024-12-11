@@ -18,21 +18,21 @@
                 <div class="container-fluid p-0">
                     <h1 class="h3 mb-3 text-capitalize">
                         <i class="bi bi-archive"></i>
-                        Halaman Manajemen Arsip Kelurahan <?= $kelurahan ?>
+                        Halaman Manajemen Arsip <?= $role ?> <strong><?= $sub_role ?></strong>
                     </h1>
-                    <?php if ($role != 'admin' && $role != 'validator'): ?>
+                    <?php if ($session_role != 'admin' && $session_role != 'validator'): ?>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
                             <i class="bi bi-plus-circle"></i> Tambah
                         </button>
                     <?php endif ?>
-                    <?php if (!empty($year_arsip) && $role == 'admin'): ?>
+                    <?php if (!empty($year_arsip) && $session_role == 'admin'): ?>
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 Cetak Laporan
                             </button>
                             <ul class="dropdown-menu">
                                 <?php foreach ($year_arsip as $item): ?>
-                                    <li><a class="dropdown-item" target="_blank" href="<?= base_url("arsip/report/$kelurahan/$item->tahun"); ?>">Tahun <?= $item->tahun ?></a></li>
+                                    <li><a class="dropdown-item" target="_blank" href="<?= base_url("arsip/report/$id_user/$item->tahun"); ?>">Tahun <?= $item->tahun ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
@@ -53,7 +53,7 @@
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
-                                                <?php if ($role == 'admin' || $role == 'validator'): ?>
+                                                <?php if ($session_role == 'admin' || $session_role == 'validator'): ?>
                                                     <th class="no-sort">Validasi</th>
                                                 <?php endif ?>
                                             </tr>
@@ -90,7 +90,7 @@
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
-                                                            <?php if (!(bool)$item->status_validasi && $role != 'validator'): ?>
+                                                            <?php if (!(bool)$item->status_validasi && $session_role != 'validator'): ?>
                                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                     <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
                                                                 </button>
@@ -102,7 +102,7 @@
                                                             <?php endif ?>
                                                         </div>
                                                     </td>
-                                                    <?php if ($role == 'admin' || $role == 'validator'): ?>
+                                                    <?php if ($session_role == 'admin' || $session_role == 'validator'): ?>
                                                         <td class="text-center">
                                                             <?php if ((bool)$item->status_validasi): ?>
                                                                 <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
@@ -140,7 +140,7 @@
                 <form method="POST" autocomplete="off" action="<?= base_url('arsip/insert') ?>" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="row g-3">
-                            <input name="kelurahan" id="kelurahan" hidden value="<?= $kelurahan ?>">
+                            <input name="id_user" id="id_user" hidden value="<?= $id_user ?>">
                             <input name="id_arsip" id="id_arsip" hidden>
                             <div class="form-group col-12">
                                 <label for="nama_dokumen" class="form-label">Nama Dokumen</label>
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a id="view_file" href="<?= base_url("dokumen"); ?>" target="_blank" class="btn btn-info">
+                        <a id="view_file" target="_blank" class="btn btn-info">
                             Lihat File <i class="bi bi-filetype-pdf" data-bs-toggle="tooltip" data-bs-title="Lihat Dokumen"></i>
                         </a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -206,7 +206,7 @@
         const btn_submit = modal_form.querySelector('#btn_submit');
 
         const setForm = (title, data) => {
-            modal_form.querySelector('#title_form').innerHTML = `${title} data arsip kelurahan <?= $kelurahan ?>`
+            modal_form.querySelector('#title_form').innerHTML = `${title} data arsip`
 
             const field = ['id_arsip', 'id_kategori', 'nama_dokumen', 'deskripsi'];
             field.forEach((e, i) => {
@@ -266,7 +266,7 @@
                 const id_arsip = btn.getAttribute('data-id');
                 title.innerHTML = 'Konfirmasi Validasi.'
                 body.innerHTML = 'Apakah Anda yakin ingin Validasi Data Arsip?'
-                confirm.setAttribute('href', `<?= base_url("arsip/validate/approve/") ?>${id_arsip}/<?= $kelurahan ?>`)
+                confirm.setAttribute('href', `<?= base_url("arsip/validate/approve/") ?>${id_arsip}/<?= $id_user ?>`)
                 confirm.innerHTML = 'Approve'
                 confirm.setAttribute('class', 'btn btn-primary')
             })
@@ -277,7 +277,7 @@
                 const id_arsip = btn.getAttribute('data-id');
                 title.innerHTML = 'Konfirmasi Pembatalan Validasi.'
                 body.innerHTML = 'Apakah Anda yakin ingin Membatalkan Validasi Data Arsip?'
-                confirm.setAttribute('href', `<?= base_url("arsip/validate/cancel/") ?>${id_arsip}/<?= $kelurahan ?>`)
+                confirm.setAttribute('href', `<?= base_url("arsip/validate/cancel/") ?>${id_arsip}/<?= $id_user ?>`)
                 confirm.innerHTML = 'Batalkan'
                 confirm.setAttribute('class', 'btn btn-danger')
             })
@@ -287,7 +287,7 @@
 
 
     <!-- Delete Modal -->
-    <?php $this->view('templates/delete_modal', ['name' => "arsip/delete/$kelurahan"]); ?>
+    <?php $this->view('templates/delete_modal', ['name' => "arsip/delete/$id_user"]); ?>
     <!-- End Delete Modal -->
 
     <!-- Script -->

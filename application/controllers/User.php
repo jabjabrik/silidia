@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller
 {
-
 	private $service_name;
 
 	public function __construct()
@@ -17,25 +16,25 @@ class User extends CI_Controller
 
 	public function index()
 	{
-		$data['data_result']  = $this->base_model->get_all($this->service_name);
+		$data['data_result']  = $this->base_model->get_all('user');
 		$data['title']        = 'User';
 		$this->load->view('user/index', $data);
 	}
 
 	public function edit()
 	{
-		$id_user  = trim($this->input->post('id_user', true));
-		$nama     = trim($this->input->post('nama', true));
-		$username = trim($this->input->post('username', true));
-		$password = trim($this->input->post('password', true));
+		$id_user   = trim($this->input->post('id_user', true));
+		$nama_user = trim($this->input->post('nama_user', true));
+		$username  = trim($this->input->post('username', true));
+		$password  = trim($this->input->post('password', true));
 
 		if (strlen($username) < 5) {
-			set_toasts('Username harus minimal 8 karakter.', 'danger');
+			set_toasts('Username harus minimal 5 karakter.', 'danger');
 			redirect($this->service_name);
 		}
 
 		$data = array(
-			'nama' => $nama,
+			'nama_user' => $nama_user,
 			'username' => $username,
 		);
 
