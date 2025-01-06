@@ -14,19 +14,22 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
-    public function get_total_kategori_arsip($sub_role = null): array
+
+    public function get_total_sub_kategori_arsip($sub_role = null): array
     {
         $where = "";
         if ($sub_role != 'admin' && $sub_role != 'validator') {
             $where .= "WHERE user.sub_role = '$sub_role'";
         }
 
-        $query = "SELECT kategori.nama_kategori, COUNT(arsip.id_arsip) AS total 
-        FROM kategori 
-        LEFT JOIN arsip ON kategori.id_kategori = arsip.id_kategori 
+        $query = "SELECT kategori.nama_kategori, sub_kategori.nama_sub_kategori, COUNT(arsip.id_arsip) AS total 
+        FROM sub_kategori 
+        JOIN kategori ON sub_kategori.id_kategori = kategori.id_kategori
+        LEFT JOIN arsip ON sub_kategori.id_sub_kategori = arsip.id_sub_kategori 
         JOIN user ON arsip.id_user = user.id_user 
         $where
-        GROUP BY kategori.nama_kategori ORDER BY kategori.id_kategori";
+        GROUP BY kategori.nama_kategori, sub_kategori.nama_sub_kategori 
+        ORDER BY sub_kategori.id_sub_kategori";
 
         $result = $this->db->query($query)->result();
         return $result;

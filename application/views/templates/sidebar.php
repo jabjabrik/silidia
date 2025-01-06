@@ -9,18 +9,26 @@
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                 </a>
             </li>
-            <?php if ($this->session->userdata('role') == 'admin'): ?>
+            <?php $role = $this->session->userdata('role'); ?>
+            <?php if ($role == 'admin' || $role == 'validator'): ?>
                 <li class="sidebar-header">
                     Master
                 </li>
-                <li class="sidebar-item <?= $title == 'User' ? 'active' : '' ?>">
-                    <a class="sidebar-link" href="<?= base_url('user'); ?>">
-                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">User</span>
-                    </a>
-                </li>
+                <?php if ($role == 'admin'): ?>
+                    <li class="sidebar-item <?= $title == 'User' ? 'active' : '' ?>">
+                        <a class="sidebar-link" href="<?= base_url('user'); ?>">
+                            <i class="align-middle" data-feather="users"></i> <span class="align-middle">User</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <li class="sidebar-item <?= $title == 'Kategori' ? 'active' : '' ?>">
                     <a class="sidebar-link" href="<?= base_url('kategori'); ?>">
                         <i class="bi bi-tag"></i> <span class="align-middle">Kategori</span>
+                    </a>
+                </li>
+                <li class="sidebar-item <?= $title == 'Sub Kategori' ? 'active' : '' ?>">
+                    <a class="sidebar-link" href="<?= base_url('kategori/sub'); ?>">
+                        <i class="bi bi-tag"></i> <span class="align-middle">Sub Kategori</span>
                     </a>
                 </li>
             <?php endif; ?>

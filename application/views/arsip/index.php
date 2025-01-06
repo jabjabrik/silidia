@@ -44,12 +44,13 @@
                                     <h5 class="card-title mb-0">Daftar Data Arsip</h5>
                                 </div>
                                 <div class="card-body">
-                                    <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: .9em;">
+                                    <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: .95em;">
                                         <thead>
                                             <tr class="text-center">
                                                 <th>No</th>
                                                 <th>Nama Dokumen</th>
                                                 <th>Kategori</th>
+                                                <th>Sub Kategori</th>
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
@@ -65,13 +66,14 @@
                                                     <td><?= $no ?></td>
                                                     <td>
                                                         <span>
-                                                            <?= strlen($item->nama_dokumen) > 55 ?
-                                                                substr($item->nama_dokumen, 0, 55) . "..."
+                                                            <?= strlen($item->nama_dokumen) > 35 ?
+                                                                substr($item->nama_dokumen, 0, 35) . "..."
                                                                 : $item->nama_dokumen;
                                                             ?>
                                                         </span>
                                                     </td>
                                                     <td><span><?= $item->nama_kategori; ?></span></td>
+                                                    <td><span><?= $item->nama_sub_kategori; ?></span></td>
                                                     <td><span><?= date('d-m-Y', strtotime($item->created_at)); ?></span></td>
                                                     <td>
                                                         <?php if ((bool)$item->status_validasi): ?>
@@ -86,7 +88,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                                            <?php $params = "[`$item->id_arsip`,`$item->id_kategori`,`$item->nama_dokumen`,`$item->deskripsi`, `$item->file_path`]"; ?>
+                                                            <?php $params = "[`$item->id_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`, `$item->file_path`]"; ?>
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
@@ -147,11 +149,11 @@
                                 <input type="text" name="nama_dokumen" id="nama_dokumen" class="form-control" required>
                             </div>
                             <div class="form-group col-12">
-                                <label for="id_kategori" class="form-label">Kategori</label>
-                                <select class="form-select" name="id_kategori" id="id_kategori" required>
+                                <label for="id_sub_kategori" class="form-label">Kategori | Sub Kategori</label>
+                                <select class="form-select" name="id_sub_kategori" id="id_sub_kategori" required>
                                     <option value="" selected>-</option>
                                     <?php foreach ($kategori as $item): ?>
-                                        <option value="<?= $item->id_kategori ?>"><?= $item->nama_kategori ?></option>
+                                        <option value="<?= $item->id_sub_kategori ?>"><?= "$item->nama_kategori | $item->nama_sub_kategori" ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -208,7 +210,7 @@
         const setForm = (title, data) => {
             modal_form.querySelector('#title_form').innerHTML = `${title} data arsip`
 
-            const field = ['id_arsip', 'id_kategori', 'nama_dokumen', 'deskripsi'];
+            const field = ['id_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi'];
             field.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
 

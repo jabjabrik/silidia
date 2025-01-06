@@ -12,6 +12,7 @@ class Kategori extends CI_Controller
 		is_logged_in();
 		$this->service_name = 'kategori';
 		$this->load->model('base_model');
+		$this->load->model('kategori_model');
 	}
 
 	public function index()
@@ -31,7 +32,7 @@ class Kategori extends CI_Controller
 
 		$data = [
 			'nama_kategori' => trim($this->input->post('nama_kategori')),
-			'keterangan'    => trim($this->input->post('keterangan')),
+			'keterangan_kategori'    => trim($this->input->post('keterangan_kategori')),
 		];
 
 		$this->base_model->insert($this->service_name, $data);
@@ -46,14 +47,14 @@ class Kategori extends CI_Controller
 			redirect($this->service_name, 'refresh');
 		}
 
-		$id = $this->input->post('id_kategori');
+		$id_kategori = $this->input->post('id_kategori');
 
 		$data = [
 			'nama_kategori' => trim($this->input->post('nama_kategori')),
-			'keterangan'    => trim($this->input->post('keterangan')),
+			'keterangan_kategori'    => trim($this->input->post('keterangan_kategori')),
 		];
 
-		$this->base_model->update($this->service_name, $data, $id);
+		$this->base_model->update($this->service_name, $data, $id_kategori);
 		set_toasts("Data $this->service_name berhasil diedit.", 'success');
 		redirect($this->service_name, 'refresh');
 	}
@@ -62,15 +63,76 @@ class Kategori extends CI_Controller
 	{
 		if (is_null($id_kategori)) show_404();
 
-		$is_exist = !is_null($this->base_model->get_one_data_by('arsip', 'id_kategori', $id_kategori));
+		$is_exist_arsip = !is_null($this->base_model->get_one_data_by('arsip', 'id_kategori', $id_kategori));
+		$is_exist_sub_kategori = !is_null($this->base_model->get_one_data_by('sub_kategori', 'id_kategori', $id_kategori));
 
-		if ($is_exist) {
+		if ($is_exist_arsip) {
 			set_toasts("Kategori tidak dapat dihapus dikarenakan kategori telah terpakai oleh data arsip", 'danger');
+			redirect($this->service_name, 'refresh');
+		}
+
+		if ($is_exist_sub_kategori) {
+			set_toasts("Kategori tidak dapat dihapus dikarenakan kategori telah terpakai oleh data sub kategori", 'danger');
 			redirect($this->service_name, 'refresh');
 		}
 
 		$this->base_model->delete($this->service_name, $id_kategori);
 		set_toasts("Data $this->service_name berhasil di Hapus", 'success');
 		redirect($this->service_name, 'refresh');
+	}
+
+	public function sub()
+	{
+		$data['title'] 		  = 'Sub Kategori';
+		$data['data_result']  = $this->kategori_model->get_sub_kategori();
+		$data['kategori']  = $this->base_model->get_all('kategori');
+		$data['service_name'] = 'sub_kategori';
+		$data['role']         = $this->session->userdata('role');
+		$this->load->view('kategori/sub', $data);
+	}
+
+	public function sub_insert()
+	{
+		if ($this->input->server('REQUEST_METHOD') !== 'POST') {
+			redirect('kategori/sub', 'refresh');
+		}
+
+		$data = [
+			'id_kategori' => trim($this->input->post('id_kategori')),
+			'nama_sub_kategori' => trim($this->input->post('nama_sub_kategori')),
+			'keterangan_sub_kategori' => trim($this->input->post('keterangan_sub_kategori')),
+		];
+
+		$this->base_model->insert('sub_kategori', $data);
+		set_toasts("Data Sub Kategori berhasil disimpan.", 'success');
+
+		redirect('kategori/sub', 'refresh');
+	}
+
+	public function sub_edit()
+	{
+		if ($this->input->server('REQUEST_METHOD') !== 'POST') {
+			redirect('kategori/sub', 'refresh');
+		}
+
+		$id_sub_kategori = $this->input->post('id_sub_kategori');
+
+		$data = [
+			'id_kategori' => trim($this->input->post('id_kategori')),
+			'nama_sub_kategori' => trim($this->input->post('nama_sub_kategori')),
+			'keterangan_sub_kategori' => trim($this->input->post('keterangan_sub_kategori')),
+		];
+
+		$this->base_model->update('sub_kategori', $data, $id_sub_kategori);
+		set_toasts("Data Sub Kategori berhasil diedit.", 'success');
+		redirect('kategori/sub', 'refresh');
+	}
+
+	public function sub_delete($id_sub_kategori = null)
+	{
+		if (is_null($id_sub_kategori)) show_404();
+		$this->base_model->delete('sub_kategori', $id_sub_kategori);
+		set_toasts("Data Sub Kategori berhasil di Hapus", 'success');
+		redirect('kategori/sub', 'refresh');
 	}
 }

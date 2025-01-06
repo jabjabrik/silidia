@@ -79,17 +79,19 @@
                     <?php endif; ?>
 
                     <h1 class="h3 my-3 text-capitalize">
-                        <strong>Informasi</strong> Kategori Pengarsipan <?= $sub_role != 'admin' && $sub_role != 'validator' ? "$role $sub_role" : ''; ?>
+                        <strong>Informasi</strong> Kategori & Sub Kategori Pengarsipan <?= $sub_role != 'admin' && $sub_role != 'validator' ? "$role $sub_role" : ''; ?>
                     </h1>
                     <div class="row g-3">
-                        <?php foreach ($kategori_arsip as $index => $item): ?>
+                        <?php foreach ($sub_kategori_arsip as $index => $item): ?>
                             <?php $color = ['primary', 'success', 'warning'][($index + 1) % 3]; ?>
                             <div class="px-3 col-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
-                                                <span class="card-title text-capitalize"><?= $item->nama_kategori ?></span>
+                                                <span class="card-title text-capitalize" style="font-size: 1.4em;"><?= $item->nama_kategori ?></span>
+                                                <br>
+                                                <span class="card-title text-capitalize" style="font-size: .85em;"><?= $item->nama_sub_kategori ?></span>
                                             </div>
                                             <div class="col-auto">
                                                 <div class="stat text-<?= $color; ?>">

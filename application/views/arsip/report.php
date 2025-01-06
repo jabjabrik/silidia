@@ -52,6 +52,7 @@
                 <th>Nama Dokumen</th>
                 <th>Tanggal</th>
                 <th>Kategori</th>
+                <th>Sub Kategori</th>
                 <th>Deskripsi</th>
             </tr>
         </thead>
@@ -64,6 +65,7 @@
                         <td><?= $item->nama_dokumen; ?></td>
                         <td style="white-space: nowrap;"><?= date('d-m-Y', strtotime($item->created_at)); ?></td>
                         <td style="white-space: nowrap;"><?= $item->nama_kategori; ?></td>
+                        <td style="white-space: nowrap;"><?= $item->nama_sub_kategori; ?></td>
                         <td><?= $item->deskripsi; ?></td>
                     </tr>
                 <?php endforeach; ?>

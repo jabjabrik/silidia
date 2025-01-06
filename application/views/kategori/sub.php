@@ -16,7 +16,7 @@
             <!-- End TopBar -->
             <main class="content pt-4 pb-0">
                 <div class="container-fluid p-0">
-                    <h1 class="h3 mb-3 text-capitalize"><i class="bi bi-tag"></i> Halaman Manajemen Kategori</h1>
+                    <h1 class="h3 mb-3 text-capitalize"><i class="bi bi-tag"></i> Halaman Manajemen Sub Kategori</h1>
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
                         <i class="bi bi-plus-circle"></i> Tambah
                     </button>
@@ -24,7 +24,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Daftar Data Kategori</h5>
+                                    <h5 class="card-title mb-0">Daftar Data Sub Kategori</h5>
                                 </div>
                                 <div class="card-body">
                                     <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: 1em;">
@@ -32,7 +32,8 @@
                                             <tr class="text-center">
                                                 <th>No</th>
                                                 <th>Nama kategori</th>
-                                                <th>Keterangan_kategori</th>
+                                                <th>Nama sub kategori</th>
+                                                <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -42,14 +43,15 @@
                                                 <tr>
                                                     <td><?= $no ?></td>
                                                     <td><?= $item->nama_kategori ?></td>
-                                                    <td><?= $item->keterangan_kategori ?></td>
+                                                    <td><?= $item->nama_sub_kategori ?></td>
+                                                    <td><?= $item->keterangan_sub_kategori ?></td>
                                                     <td>
-                                                        <?php $params = "[`$item->id_kategori`,`$item->nama_kategori`,`$item->keterangan_kategori`]" ?>
+                                                        <?php $params = "[`$item->id_sub_kategori`,`$item->id_kategori`,`$item->nama_sub_kategori`, `$item->keterangan_sub_kategori`]" ?>
                                                         <div class="btn-group btn-group-sm" role="group">
                                                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                 <i class="bi bi-pencil-square"></i> Edit
                                                             </button>
-                                                            <button id="btn_delete" type="button" class="btn btn-outline-danger" data-id="<?= $item->id_kategori ?>" data-bs-toggle="modal" data-bs-target="#confirm_modal">
+                                                            <button id="btn_delete" type="button" class="btn btn-outline-danger" data-id="<?= $item->id_sub_kategori ?>" data-bs-toggle="modal" data-bs-target="#confirm_modal">
                                                                 <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-title="Hapus data"></i> Hapus
                                                             </button>
                                                         </div>
@@ -79,14 +81,23 @@
                 <form method="POST" autocomplete="off">
                     <div class="modal-body">
                         <div class="row g-3">
-                            <input type="text" name="id_kategori" id="id_kategori" hidden>
-                            <div class="form-group col-md-4 col-12">
-                                <label for="nama_kategori" class="form-label">Nama Kategori</label>
-                                <input type="text" name="nama_kategori" id="nama_kategori" class="form-control" required>
+                            <input type="text" name="id_sub_kategori" id="id_sub_kategori" hidden>
+                            <div class="form-group col-md-6 col-12">
+                                <label for="id_kategori" class="form-label">Nama Kategori</label>
+                                <select class="form-select" name="id_kategori" id="id_kategori" required>
+                                    <option value="" selected>-</option>
+                                    <?php foreach ($kategori as $item): ?>
+                                        <option value="<?= $item->id_kategori ?>"><?= $item->nama_kategori ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                            <div class="form-group col-md-8 col-12">
-                                <label for="keterangan_kategori" class="form-label">Keterangan</label>
-                                <input type="text" name="keterangan_kategori" id="keterangan_kategori" class="form-control" required>
+                            <div class="form-group col-md-6 col-12">
+                                <label for="nama_sub_kategori" class="form-label">Nama Sub Kategori</label>
+                                <input type="text" name="nama_sub_kategori" id="nama_sub_kategori" class="form-control" required>
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="keterangan_sub_kategori" class="form-label">Keterangan</label>
+                                <input type="text" name="keterangan_sub_kategori" id="keterangan_sub_kategori" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -102,7 +113,7 @@
 
 
     <!-- Delete Modal -->
-    <?php $this->view('components/confirm_modal', ['url' => "kategori/delete"]); ?>
+    <?php $this->view('components/confirm_modal', ['url' => "kategori/sub_delete"]); ?>
     <!-- End Delete Modal -->
 
     <!-- Script Form -->
@@ -111,20 +122,20 @@
         const btn_submit = modal_form.querySelector('#btn_submit');
 
         const setForm = (title, data) => {
-            modal_form.querySelector('#title_form').innerHTML = `${title} data kategori`
-            const fields = ['id_kategori', 'nama_kategori', 'keterangan_kategori'];
+            modal_form.querySelector('#title_form').innerHTML = `${title} data sub kategori`
+            const fields = ['id_sub_kategori', 'id_kategori', 'nama_sub_kategori', 'keterangan_sub_kategori'];
             fields.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
                 element.value = title === 'tambah' ? '' : data[i];
             })
 
             if (title === 'tambah') {
-                modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/insert") ?>');
+                modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/sub_insert") ?>');
                 btn_submit.innerHTML = 'Simpan';
             }
 
             if (title === 'edit') {
-                modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/edit") ?>');
+                modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/sub_edit") ?>');
                 btn_submit.innerHTML = 'Edit';
             }
         }

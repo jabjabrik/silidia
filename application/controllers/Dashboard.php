@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller
         $data['kecamatan_arsip'] = $this->dashboard_model->get_total_arsip('kecamatan');
         $data['kelurahan_arsip'] = $this->dashboard_model->get_total_arsip('kelurahan');
 
-        $data['kategori_arsip'] = $this->dashboard_model->get_total_kategori_arsip($sub_role);
+        $data['sub_kategori_arsip'] = $this->dashboard_model->get_total_sub_kategori_arsip($sub_role);
 
         $this->load->view('dashboard/index', $data);
     }

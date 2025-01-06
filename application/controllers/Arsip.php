@@ -9,6 +9,7 @@ class Arsip extends CI_Controller
 		is_logged_in();
 		$this->load->model('arsip_model');
 		$this->load->model('base_model');
+		$this->load->model('kategori_model');
 		$this->load->library('Dompdf_lib');
 	}
 
@@ -38,7 +39,7 @@ class Arsip extends CI_Controller
 		$data['sub_role']    = $data['data_result'][0]->sub_role;
 
 		$data['title'] 		 = 'Arsip ' . ucfirst($data['sub_role']);
-		$data['kategori']    = $this->base_model->get_all('kategori');
+		$data['kategori']    = $this->kategori_model->get_sub_kategori();
 		$data['id_user']   = $id_user;
 
 		$this->load->view('arsip/index', $data);
@@ -54,7 +55,7 @@ class Arsip extends CI_Controller
 
 		$data = [
 			'id_user'      => $id_user,
-			'id_kategori'  => trim($this->input->post('id_kategori', true)),
+			'id_sub_kategori'  => trim($this->input->post('id_sub_kategori', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
 		];
@@ -77,7 +78,7 @@ class Arsip extends CI_Controller
 		$id_arsip = $this->input->post('id_arsip');
 
 		$data = [
-			'id_kategori'  => trim($this->input->post('id_kategori', true)),
+			'id_sub_kategori'  => trim($this->input->post('id_sub_kategori', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
 		];
