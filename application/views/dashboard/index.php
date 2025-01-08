@@ -18,7 +18,7 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <?php if ($sub_role == 'admin' || $sub_role == 'validator'): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == 'viewer'): ?>
                         <h1 class="h3 mb-3"><strong>Informasi</strong> Pengarsipan Kecamatan</h1>
                         <div class="row g-3">
                             <?php foreach ($kecamatan_arsip as $index => $item): ?>
@@ -48,7 +48,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <?php if ($sub_role == 'admin' || $sub_role == 'validator'): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == 'viewer'): ?>
                         <h1 class="h3 mb-3"><strong>Informasi</strong> Pengarsipan Kelurahan</h1>
                         <div class="row g-3">
                             <?php foreach ($kelurahan_arsip as $index => $item): ?>
@@ -79,7 +79,7 @@
                     <?php endif; ?>
 
                     <h1 class="h3 my-3 text-capitalize">
-                        <strong>Informasi</strong> Kategori & Sub Kategori Pengarsipan <?= $sub_role != 'admin' && $sub_role != 'validator' ? "$role $sub_role" : ''; ?>
+                        <strong>Informasi</strong> Kategori & Sub Kategori Pengarsipan <?= $sub_role != 'admin' && $sub_role != 'validator' && $sub_role != 'viewer' ? "$role $sub_role" : ''; ?>
                     </h1>
                     <div class="row g-3">
                         <?php foreach ($sub_kategori_arsip as $index => $item): ?>

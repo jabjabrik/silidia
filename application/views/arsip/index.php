@@ -20,12 +20,12 @@
                         <i class="bi bi-archive"></i>
                         Halaman Manajemen Arsip <?= $role ?> <strong><?= $sub_role ?></strong>
                     </h1>
-                    <?php if ($session_role != 'admin' && $session_role != 'validator'): ?>
+                    <?php if ($session_role == 'kecamatan' || $session_role == 'kelurahan'): ?>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
                             <i class="bi bi-plus-circle"></i> Tambah
                         </button>
                     <?php endif ?>
-                    <?php if (!empty($year_arsip) && $session_role == 'admin'): ?>
+                    <?php if (!empty($year_arsip) && ($session_role != 'kecamatan' && $session_role != 'kelurahan')): ?>
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 Cetak Laporan
@@ -43,7 +43,7 @@
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">Daftar Data Arsip</h5>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" style="overflow: auto;">
                                     <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: .95em;">
                                         <thead>
                                             <tr class="text-center">
@@ -54,7 +54,7 @@
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
-                                                <?php if ($session_role == 'admin' || $session_role == 'validator'): ?>
+                                                <?php if ($session_role == 'validator'): ?>
                                                     <th class="no-sort">Validasi</th>
                                                 <?php endif ?>
                                             </tr>
@@ -64,7 +64,7 @@
                                             <?php foreach ($data_result as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
-                                                    <td>
+                                                    <td style="white-space: wrap">
                                                         <span>
                                                             <?= strlen($item->nama_dokumen) > 35 ?
                                                                 substr($item->nama_dokumen, 0, 35) . "..."
@@ -92,7 +92,7 @@
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
-                                                            <?php if (!(bool)$item->status_validasi && $session_role != 'validator'): ?>
+                                                            <?php if (!(bool)$item->status_validasi && ($session_role == 'kecamatan' || $session_role == 'kelurahan' || $session_role == 'validator')): ?>
                                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                     <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
                                                                 </button>
@@ -104,7 +104,7 @@
                                                             <?php endif ?>
                                                         </div>
                                                     </td>
-                                                    <?php if ($session_role == 'admin' || $session_role == 'validator'): ?>
+                                                    <?php if ($session_role == 'validator'): ?>
                                                         <td class="text-center">
                                                             <?php if ((bool)$item->status_validasi): ?>
                                                                 <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">

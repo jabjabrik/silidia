@@ -18,7 +18,7 @@ class Dashboard_model extends CI_Model
     public function get_total_sub_kategori_arsip($sub_role = null): array
     {
         $where = "";
-        if ($sub_role != 'admin' && $sub_role != 'validator') {
+        if ($sub_role != 'admin' && $sub_role != 'validator' && $sub_role != 'viewer') {
             $where .= "WHERE user.sub_role = '$sub_role'";
         }
 

@@ -17,24 +17,28 @@
             <main class="content pt-4 pb-0">
                 <div class="container-fluid p-0">
                     <h1 class="h3 mb-3 text-capitalize"><i class="bi bi-tag"></i> Halaman Manajemen Sub Kategori</h1>
-                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
-                        <i class="bi bi-plus-circle"></i> Tambah
-                    </button>
+                    <?php if ($this->session->userdata('role') == 'validator'): ?>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
+                            <i class="bi bi-plus-circle"></i> Tambah
+                        </button>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">Daftar Data Sub Kategori</h5>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" style="overflow: auto;">
                                     <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: 1em;">
                                         <thead>
                                             <tr class="text-center">
                                                 <th>No</th>
                                                 <th>Nama kategori</th>
-                                                <th>Nama sub kategori</th>
+                                                <th>Sub kategori</th>
                                                 <th>Keterangan</th>
-                                                <th>Aksi</th>
+                                                <?php if ($this->session->userdata('role') == 'validator'): ?>
+                                                    <th>Aksi</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -44,18 +48,20 @@
                                                     <td><?= $no ?></td>
                                                     <td><?= $item->nama_kategori ?></td>
                                                     <td><?= $item->nama_sub_kategori ?></td>
-                                                    <td><?= $item->keterangan_sub_kategori ?></td>
-                                                    <td>
-                                                        <?php $params = "[`$item->id_sub_kategori`,`$item->id_kategori`,`$item->nama_sub_kategori`, `$item->keterangan_sub_kategori`]" ?>
-                                                        <div class="btn-group btn-group-sm" role="group">
-                                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
-                                                                <i class="bi bi-pencil-square"></i> Edit
-                                                            </button>
-                                                            <button id="btn_delete" type="button" class="btn btn-outline-danger" data-id="<?= $item->id_sub_kategori ?>" data-bs-toggle="modal" data-bs-target="#confirm_modal">
-                                                                <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-title="Hapus data"></i> Hapus
-                                                            </button>
-                                                        </div>
-                                                    </td>
+                                                    <td style="white-space: wrap"><?= $item->keterangan_sub_kategori; ?></td>
+                                                    <?php if ($this->session->userdata('role') == 'validator'): ?>
+                                                        <td>
+                                                            <?php $params = "[`$item->id_sub_kategori`,`$item->id_kategori`,`$item->nama_sub_kategori`, `$item->keterangan_sub_kategori`]" ?>
+                                                            <div class="btn-group btn-group-sm" role="group">
+                                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
+                                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                                </button>
+                                                                <button id="btn_delete" type="button" class="btn btn-outline-danger" data-id="<?= $item->id_sub_kategori ?>" data-bs-toggle="modal" data-bs-target="#confirm_modal">
+                                                                    <i class="bi bi-trash" data-bs-toggle="tooltip" data-bs-title="Hapus data"></i> Hapus
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <?php $no++ ?>
                                             <?php endforeach; ?>

@@ -10,7 +10,7 @@
                 </a>
             </li>
             <?php $role = $this->session->userdata('role'); ?>
-            <?php if ($role == 'admin' || $role == 'validator'): ?>
+            <?php if ($role == 'admin' || $role == 'validator' || $role == 'viewer'): ?>
                 <li class="sidebar-header">
                     Master
                 </li>
@@ -38,7 +38,7 @@
                 </li>
                 <?php $sub_role = $this->session->userdata('sub_role'); ?>
                 <?php foreach (get_role_kecamatan_kelurahan('kecamatan') as $item): ?>
-                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == $item->sub_role): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == 'viewer' || $sub_role == $item->sub_role): ?>
                         <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item->sub_role) ? 'active' : '' ?>">
                             <a class="sidebar-link" href="<?= base_url("arsip?id=$item->id_user"); ?>">
                                 <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item->sub_role; ?></span>
@@ -53,7 +53,7 @@
                 </li>
                 <?php $sub_role = $this->session->userdata('sub_role'); ?>
                 <?php foreach (get_role_kecamatan_kelurahan('kelurahan') as $item): ?>
-                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == $item->sub_role): ?>
+                    <?php if ($sub_role == 'admin' || $sub_role == 'validator' || $sub_role == 'viewer' || $sub_role == $item->sub_role): ?>
                         <li class="sidebar-item <?= $title == "Arsip " . ucfirst($item->sub_role) ? 'active' : '' ?>">
                             <a class="sidebar-link" href="<?= base_url("arsip?id=$item->id_user"); ?>">
                                 <i class="align-middle" data-feather="hash"></i> <span class="align-middle text-capitalize"><?= $item->sub_role; ?></span>
