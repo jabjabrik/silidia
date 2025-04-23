@@ -27,7 +27,7 @@ class Arsip extends CI_Controller
 		$id_user_session = $this->session->userdata('id_user');
 		$role = $this->session->userdata('role');
 
-		if ($id_user_session != $id_user && $role != 'admin' && $role != 'validator' && $role != 'viewer') {
+		if ($id_user_session != $id_user && $role != 'admin' && $role != 'validator') {
 			redirect("arsip?id=$id_user_session", 'refresh');
 		}
 

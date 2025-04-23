@@ -31,7 +31,7 @@
 									</div>
 								</div>
 							</div>
-							<form action="<?= base_url(); ?>" method="POST" autocomplete="off">
+							<form action="<?= base_url(); ?>" method="POST">
 								<div class="row gy-3  overflow-hidden">
 									<div class="col-12">
 										<label for="username" class="form-label">Username <span class="text-danger">*</span></label>
@@ -46,6 +46,15 @@
 											<i id="eye" class="bi bi-eye-slash" style="position: absolute; right: 10px; top: -27px; cursor: pointer;"></i>
 										</div>
 										<?= form_error('password', '<small class="text-danger pl-3 mt-1 d-block" style="text-align: left;">', '</small>'); ?>
+									</div>
+									<div class="mt-3">
+										<label>Captcha</label>
+										<?= $captcha_img ?>
+									</div>
+									<div class="col-12">
+										<label for="captcha" class="form-label">Masukan Captcha <span class="text-danger">*</span></label>
+										<input type="text" class="form-control" name="captcha" id="captcha">
+										<?= form_error('captcha', '<small class="text-danger pl-3 mt-1 d-block" style="text-align: left;">', '</small>'); ?>
 									</div>
 									<div class="col-12">
 										<div class="d-grid">

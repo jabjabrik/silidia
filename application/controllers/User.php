@@ -42,6 +42,9 @@ class User extends CI_Controller
 			if (strlen($password) < 8) {
 				set_toasts('Password harus minimal 8 karakter.', 'danger');
 				redirect($this->service_name);
+			} elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/', $password)) {
+				set_toasts('Password harus mengandung huruf kecil, huruf besar, angka, dan karakter spesial.', 'danger');
+				redirect($this->service_name);
 			} else {
 				$data['password'] = password_hash($password, PASSWORD_DEFAULT);
 			}

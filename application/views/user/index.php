@@ -94,6 +94,7 @@
                                 </div>
                                 <div class="form-text">Biarkan Input Password Kosong, Bila Tidak Ingin Merubah Password</div>
                                 <div class="form-text">Password Minimal 8 karakter</div>
+                                <div class="form-text">Kombinasi antara Huruf Kecil, Huruf Besar, Angka dan Karakter Spesial</div>
                             </div>
                         </div>
                     </div>
