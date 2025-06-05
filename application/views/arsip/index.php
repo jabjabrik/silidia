@@ -22,7 +22,7 @@
                     </h1>
                     <?php if ($session_role == 'kecamatan' || $session_role == 'kelurahan'): ?>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
-                            <i class="bi bi-plus-circle"></i> Tambah
+                            <i class="bi bi-plus-circle"></i> Upload
                         </button>
                     <?php endif ?>
                     <?php if (!empty($year_arsip) && ($session_role != 'kecamatan' && $session_role != 'kelurahan')): ?>
@@ -76,13 +76,19 @@
                                                     <td><span><?= $item->nama_sub_kategori; ?></span></td>
                                                     <td><span><?= date('d-m-Y', strtotime($item->created_at)); ?></span></td>
                                                     <td>
-                                                        <?php if ((bool)$item->status_validasi): ?>
-                                                            <span class="badge bg-success">
-                                                                <i style="cursor: pointer;" class="bi bi-check-circle text-white" data-bs-toggle="tooltip" data-bs-title="Data tervalidasi oleh admin"></i> Tervalidasi
-                                                            </span>
-                                                        <?php else: ?>
+                                                        <?php if ($item->status_validasi == "proses"): ?>
                                                             <span class="badge bg-warning">
-                                                                <i style="cursor: pointer;" class="bi bi-clock text-white" data-bs-toggle="tooltip" data-bs-title="Menunggu validasi oleh admin"></i> Proses
+                                                                <i style="cursor: pointer;" class="bi bi-clock text-white" data-bs-toggle="tooltip" data-bs-title="Menunggu validasi oleh validator"></i> Proses
+                                                            </span>
+                                                        <?php endif ?>
+                                                        <?php if ($item->status_validasi == "tervalidasi"): ?>
+                                                            <span class="badge bg-success">
+                                                                <i style="cursor: pointer;" class="bi bi-check-circle text-white" data-bs-toggle="tooltip" data-bs-title="Data tervalidasi oleh validator"></i> Tervalidasi
+                                                            </span>
+                                                        <?php endif ?>
+                                                        <?php if ($item->status_validasi == "ditolak"): ?>
+                                                            <span class="badge bg-danger">
+                                                                <i style="cursor: pointer;" class="bi bi-check-circle text-white" data-bs-toggle="tooltip" data-bs-title="Data ditolak oleh validator"></i> Ditolak
                                                             </span>
                                                         <?php endif ?>
                                                     </td>
@@ -92,10 +98,12 @@
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
-                                                            <?php if (!(bool)$item->status_validasi && ($session_role == 'kecamatan' || $session_role == 'kelurahan' || $session_role == 'validator')): ?>
-                                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
-                                                                    <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
-                                                                </button>
+                                                            <?php if ($item->status_validasi != "tervalidasi"  && $session_role != 'admin'): ?>
+                                                                <?php if ($item->status_validasi != "ditolak"): ?>
+                                                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
+                                                                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
+                                                                    </button>
+                                                                <?php endif ?>
                                                                 <button id="delete-btn" type="button" class="btn btn-outline-danger btn-sm" data-id="<?= $item->id_arsip; ?>" data-bs-toggle="modal" data-bs-target="#modal_delete">
                                                                     <span data-bs-toggle="tooltip" data-bs-title="Hapus data arsip">
                                                                         <i class="bi bi-trash"></i>
@@ -106,13 +114,16 @@
                                                     </td>
                                                     <?php if ($session_role == 'validator'): ?>
                                                         <td class="text-center">
-                                                            <?php if ((bool)$item->status_validasi): ?>
-                                                                <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
-                                                                    <i class="bi bi-check2-bi bi-x-circle" data-bs-toggle="tooltip" data-bs-title="Membatalkan validasi"></i>
+                                                            <?php if ($item->status_validasi != "proses"): ?>
+                                                                <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
+                                                                    <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" data-bs-title="Membatalkan validasi"></i>
                                                                 </button>
                                                             <?php else: ?>
                                                                 <button type="button" id="btn_approve" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
                                                                     <i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-title="Memvalidasi data"></i>
+                                                                </button>
+                                                                <button type="button" id="btn_reject" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
+                                                                    <i class="bi bi-check2-bi bi-x-circle" data-bs-toggle="tooltip" data-bs-title="Tolak data"></i>
                                                                 </button>
                                                             <?php endif ?>
                                                         </td>
@@ -257,6 +268,7 @@
     <!-- Script Modal Validasi -->
     <script>
         const btn_approve = document.querySelectorAll('#btn_approve');
+        const btn_reject = document.querySelectorAll('#btn_reject');
         const btn_cancel = document.querySelectorAll('#btn_cancel');
         const modal_validasi = document.querySelector('#modal_validasi');
         const title = modal_validasi.querySelector('.modal-title');
@@ -268,9 +280,20 @@
                 const id_arsip = btn.getAttribute('data-id');
                 title.innerHTML = 'Konfirmasi Validasi.'
                 body.innerHTML = 'Apakah Anda yakin ingin Validasi Data Arsip?'
-                confirm.setAttribute('href', `<?= base_url("arsip/validate/approve/") ?>${id_arsip}/<?= $id_user ?>`)
+                confirm.setAttribute('href', `<?= base_url("arsip/validate/tervalidasi/") ?>${id_arsip}/<?= $id_user ?>`)
                 confirm.innerHTML = 'Approve'
                 confirm.setAttribute('class', 'btn btn-primary')
+            })
+        })
+
+        btn_reject.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id_arsip = btn.getAttribute('data-id');
+                title.innerHTML = 'Validasi penolakan.'
+                body.innerHTML = 'Apakah Anda yakin ingin tolak Data Arsip?'
+                confirm.setAttribute('href', `<?= base_url("arsip/validate/ditolak/") ?>${id_arsip}/<?= $id_user ?>`)
+                confirm.innerHTML = 'Tolak'
+                confirm.setAttribute('class', 'btn btn-danger')
             })
         })
 
@@ -279,9 +302,9 @@
                 const id_arsip = btn.getAttribute('data-id');
                 title.innerHTML = 'Konfirmasi Pembatalan Validasi.'
                 body.innerHTML = 'Apakah Anda yakin ingin Membatalkan Validasi Data Arsip?'
-                confirm.setAttribute('href', `<?= base_url("arsip/validate/cancel/") ?>${id_arsip}/<?= $id_user ?>`)
+                confirm.setAttribute('href', `<?= base_url("arsip/validate/proses/") ?>${id_arsip}/<?= $id_user ?>`)
                 confirm.innerHTML = 'Batalkan'
-                confirm.setAttribute('class', 'btn btn-danger')
+                confirm.setAttribute('class', 'btn btn-primary')
             })
         })
     </script>

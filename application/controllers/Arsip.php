@@ -20,9 +20,9 @@ class Arsip extends CI_Controller
 			show_404();
 		}
 
-		$is_exist = !is_null($this->base_model->get_one_data_by('user', 'id_user', $id_user));
+		$user = $this->base_model->get_one_data_by('user', 'id_user', $id_user);
 
-		if (!$is_exist || $id_user == '1' || $id_user == '2') show_404();
+		if (!$user || $id_user == '1' || $id_user == '2') show_404();
 
 		$id_user_session = $this->session->userdata('id_user');
 		$role = $this->session->userdata('role');
@@ -35,8 +35,8 @@ class Arsip extends CI_Controller
 		$data['year_arsip']  = $this->arsip_model->get_year_arsip($id_user);
 
 		$data['session_role']  		 = $this->session->userdata('role');
-		$data['role']    = $data['data_result'][0]->role;
-		$data['sub_role']    = $data['data_result'][0]->sub_role;
+		$data['role']    = $user->role;
+		$data['sub_role']    = $user->sub_role;
 
 		$data['title'] 		 = 'Arsip ' . ucfirst($data['sub_role']);
 		$data['kategori']    = $this->kategori_model->get_sub_kategori();
@@ -111,7 +111,7 @@ class Arsip extends CI_Controller
 			redirect("arsip?id=$id_user", 'refresh');
 		}
 
-		if ((bool)$arsip->status_validasi) {
+		if ($arsip->status_validasi == "tervalidasi") {
 			set_toasts('Tidak dapat menghapus Arsip yang telah tervalidasi.', 'danger');
 			redirect("arsip?id=$id_user", 'refresh');
 		}
@@ -123,13 +123,13 @@ class Arsip extends CI_Controller
 		redirect("arsip?id=$id_user", 'refresh');
 	}
 
-	public function validate($type = null, $id_arsip = null, $id_user = null)
+	public function validate($status_validasi = null, $id_arsip = null, $id_user = null)
 	{
-		if (is_null($type) || is_null($id_arsip) || is_null($id_user)) {
+		if (is_null($status_validasi) || is_null($id_arsip) || is_null($id_user)) {
 			show_404();
 		}
 
-		if ($type != 'approve' && $type != 'cancel') {
+		if ($status_validasi != 'tervalidasi' && $status_validasi != 'ditolak' && $status_validasi != 'proses') {
 			show_404();
 		}
 
@@ -140,12 +140,9 @@ class Arsip extends CI_Controller
 			redirect("arsip?id=$id_user", 'refresh');
 		}
 
-		$status_validasi = $type == 'approve' ? 1 : 0;
-
 		$this->base_model->update('arsip', ['status_validasi' => $status_validasi], $id_arsip);
 
-		$msg = $status_validasi == 1 ? "Data Arsip Berhasil di Validasi" : "Pembatalan Validasi Berhasil";
-		set_toasts($msg, 'success');
+		set_toasts("Status arsip berhasil diproses", "success");
 		redirect("arsip?id=$id_user", 'refresh');
 	}
 
