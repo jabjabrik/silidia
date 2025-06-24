@@ -31,6 +31,7 @@ class Kategori extends CI_Controller
 		}
 
 		$data = [
+			'kode_kategori' => 'BJ' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT),
 			'nama_kategori' => trim($this->input->post('nama_kategori')),
 			'keterangan_kategori'    => trim($this->input->post('keterangan_kategori')),
 		];

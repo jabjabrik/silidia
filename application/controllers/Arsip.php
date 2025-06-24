@@ -146,25 +146,38 @@ class Arsip extends CI_Controller
 		redirect("arsip?id=$id_user", 'refresh');
 	}
 
-	public function report($id_user = null, $tahun = null)
+	// Ambil kategori berdasarkan tahun arsip
+	public function get_kategori_by_tahun($id_user = null, $tahun = null)
 	{
 		if (is_null($id_user) || is_null($tahun)) {
 			show_404();
 		}
+		$this->load->model('kategori_model');
+		$result = $this->kategori_model->get_kategori_by_tahun($id_user, $tahun);
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
 
-		$data['data_result'] = $this->arsip_model->get_arsip_report($id_user, $tahun);
+	// Ubah: public function report($id_user = null, $tahun = null)
+	public function report($id_user = null, $tahun = null, $id_kategori = null)
+	{
+		if (is_null($id_user) || is_null($tahun) || is_null($id_kategori)) {
+			show_404();
+		}
+		if ($id_kategori === 'all') {
+			$data['data_result'] = $this->arsip_model->get_arsip_report($id_user, $tahun);
+		} else {
+			$data['data_result'] = $this->arsip_model->get_arsip_report_by_kategori($id_user, $tahun, $id_kategori);
+		}
+		if (empty($data['data_result'])) show_404();
 		$data['role'] = $data['data_result'][0]->role;
 		$data['sub_role'] = $data['data_result'][0]->sub_role;
 		$data['tahun'] = $tahun;
-
+		$data['kategori'] = ($id_kategori === 'all') ? 'Semua Kategori' : $data['data_result'][0]->nama_kategori;
 		$html = $this->load->view('arsip/report', $data, TRUE);
-
-		// Atur DOMPDF
 		$this->dompdf_lib->loadHtml($html);
 		$this->dompdf_lib->setPaper('A4', 'portrait');
 		$this->dompdf_lib->render();
-
-		// Output file PDF
-		$this->dompdf_lib->stream("laporan-" . $data['role'] . "-" . $data['sub_role'] . "-$tahun.pdf", array("Attachment" => 0));
+		$this->dompdf_lib->stream("laporan-" . $data['role'] . "-" . $data['sub_role'] . "-{$data['kategori']}-{$tahun}.pdf", array("Attachment" => 0));
 	}
 }

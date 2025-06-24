@@ -46,4 +46,17 @@ class Arsip_model extends CI_Model
         $result = $this->db->query($query)->result();
         return $result;
     }
+
+    // Ambil arsip berdasarkan user, tahun, dan kategori
+    public function get_arsip_report_by_kategori($id_user, $tahun, $id_kategori)
+    {
+        $query = "SELECT arsip.*, user.role, user.sub_role, kategori.nama_kategori, sub_kategori.nama_sub_kategori 
+        FROM arsip 
+        JOIN user ON arsip.id_user = user.id_user 
+        JOIN sub_kategori ON arsip.id_sub_kategori = sub_kategori.id_sub_kategori
+        JOIN kategori ON sub_kategori.id_kategori = kategori.id_kategori
+        WHERE user.id_user = ? AND YEAR(arsip.created_at) = ? AND kategori.id_kategori = ? AND arsip.status_validasi = 'tervalidasi'
+        ORDER BY arsip.created_at";
+        return $this->db->query($query, [$id_user, $tahun, $id_kategori])->result();
+    }
 }

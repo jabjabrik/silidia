@@ -113,7 +113,7 @@ class Auth extends CI_Controller
 			'word_length'   => 5,
 			'font_size'     => 25,
 			'img_id'        => 'Imageid',
-			'pool'          => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+			'pool'          => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
 
 			// White background and border, black text and red grid
 			'colors'        => array(

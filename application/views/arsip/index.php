@@ -32,9 +32,14 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <?php foreach ($year_arsip as $item): ?>
-                                    <li><a class="dropdown-item" target="_blank" href="<?= base_url("arsip/report/$id_user/$item->tahun"); ?>">Tahun <?= $item->tahun ?></a></li>
+                                    <li><a class="dropdown-item cetak-tahun" href="#" data-tahun="<?= $item->tahun ?>">Tahun <?= $item->tahun ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
+                        </div>
+                        <div id="kategori-select-wrapper" style="display:none; margin-top:10px;">
+                            <label for="kategori-select">Pilih Kategori:</label>
+                            <select id="kategori-select" class="form-select form-select-sm" style="width:auto; display:inline-block;"></select>
+                            <button id="btn-cetak-laporan" class="btn btn-primary btn-sm" style="margin-left:5px;">Cetak</button>
                         </div>
                     <?php endif; ?>
                     <div class="row">
@@ -326,6 +331,52 @@
     <!-- Logout Modal  -->
     <?php $this->view('templates/logout_modal'); ?>
     <!-- End Logout Modal  -->
+
+    <!-- Cetak laporan interaktif -->
+    <script>
+        // Cetak laporan interaktif
+        const kategoriSelectWrapper = document.getElementById('kategori-select-wrapper');
+        const kategoriSelect = document.getElementById('kategori-select');
+        const btnCetakLaporan = document.getElementById('btn-cetak-laporan');
+        let selectedTahun = null;
+        let selectedKategori = null;
+        let idUser = "<?= $id_user ?>";
+
+        // Event klik tahun
+        const tahunLinks = document.querySelectorAll('.cetak-tahun');
+        tahunLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                selectedTahun = this.getAttribute('data-tahun');
+                kategoriSelect.innerHTML = '<option value="">Memuat...</option>';
+                kategoriSelectWrapper.style.display = 'block';
+                // Ambil kategori via AJAX
+                fetch(`<?= base_url('arsip/get_kategori_by_tahun/') ?>${idUser}/${selectedTahun}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        kategoriSelect.innerHTML = '<option value="">- Pilih Kategori -</option>';
+                        kategoriSelect.innerHTML += '<option value="all">Semua Kategori</option>';
+                        data.forEach(item => {
+                            kategoriSelect.innerHTML += `<option value="${item.id_kategori}">${item.kode_kategori} - ${item.nama_kategori}</option>`;
+                        });
+                    });
+            });
+        });
+
+        kategoriSelect.addEventListener('change', function() {
+            selectedKategori = this.value;
+        });
+
+        btnCetakLaporan.addEventListener('click', function() {
+            if (!selectedTahun || !kategoriSelect.value) {
+                alert('Pilih tahun dan kategori terlebih dahulu!');
+                return;
+            }
+            let kategoriParam = kategoriSelect.value;
+            window.open(`<?= base_url('arsip/report/') ?>${idUser}/${selectedTahun}/${kategoriParam}`, '_blank');
+        });
+    </script>
+    <!-- End Script Interaktif -->
 </body>
 
 </html>

@@ -33,6 +33,7 @@
                                         <thead>
                                             <tr class="text-center">
                                                 <th>No</th>
+                                                <th>Kode</th>
                                                 <th>Nama kategori</th>
                                                 <th>Keterangan_kategori</th>
                                                 <?php if ($this->session->userdata('role') == 'validator'): ?>
@@ -45,6 +46,7 @@
                                             <?php foreach ($data_result as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
+                                                    <td><?= $item->kode_kategori ?></td>
                                                     <td><?= $item->nama_kategori ?></td>
                                                     <td style="white-space: wrap;"><?= $item->keterangan_kategori ?></td>
                                                     <?php if ($this->session->userdata('role') == 'validator'): ?>
