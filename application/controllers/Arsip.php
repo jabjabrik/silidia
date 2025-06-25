@@ -55,6 +55,7 @@ class Arsip extends CI_Controller
 
 		$data = [
 			'id_user'      => $id_user,
+			'kode_arsip'  => trim($this->input->post('kode_arsip', true)),
 			'id_sub_kategori'  => trim($this->input->post('id_sub_kategori', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
@@ -79,6 +80,7 @@ class Arsip extends CI_Controller
 
 		$data = [
 			'id_sub_kategori'  => trim($this->input->post('id_sub_kategori', true)),
+			'kode_arsip'  => trim($this->input->post('kode_arsip', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
 		];
@@ -176,7 +178,7 @@ class Arsip extends CI_Controller
 		$data['kategori'] = ($id_kategori === 'all') ? 'Semua Kategori' : $data['data_result'][0]->nama_kategori;
 		$html = $this->load->view('arsip/report', $data, TRUE);
 		$this->dompdf_lib->loadHtml($html);
-		$this->dompdf_lib->setPaper('A4', 'portrait');
+		$this->dompdf_lib->setPaper('A4', 'landscape');
 		$this->dompdf_lib->render();
 		$this->dompdf_lib->stream("laporan-" . $data['role'] . "-" . $data['sub_role'] . "-{$data['kategori']}-{$tahun}.pdf", array("Attachment" => 0));
 	}

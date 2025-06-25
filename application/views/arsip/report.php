@@ -49,6 +49,7 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th style="white-space: nowrap;">Kode Dokumen</th>
                 <th>Nama Dokumen</th>
                 <th>Tanggal</th>
                 <th>Kategori</th>
@@ -62,6 +63,7 @@
                 foreach ($data_result as $item): ?>
                     <tr>
                         <td><?= $no++; ?></td>
+                        <td><?= $item->kode_arsip; ?></td>
                         <td><?= $item->nama_dokumen; ?></td>
                         <td style="white-space: nowrap;"><?= date('d-m-Y', strtotime($item->created_at)); ?></td>
                         <td style="white-space: nowrap;"><?= $item->nama_kategori; ?></td>

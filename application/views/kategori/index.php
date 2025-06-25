@@ -51,7 +51,7 @@
                                                     <td style="white-space: wrap;"><?= $item->keterangan_kategori ?></td>
                                                     <?php if ($this->session->userdata('role') == 'validator'): ?>
                                                         <td>
-                                                            <?php $params = "[`$item->id_kategori`,`$item->nama_kategori`,`$item->keterangan_kategori`]" ?>
+                                                            <?php $params = "[`$item->id_kategori`,`$item->kode_kategori`,`$item->nama_kategori`,`$item->keterangan_kategori`]" ?>
                                                             <div class="btn-group btn-group-sm" role="group">
                                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                     <i class="bi bi-pencil-square"></i> Edit
@@ -88,11 +88,15 @@
                     <div class="modal-body">
                         <div class="row g-3">
                             <input type="text" name="id_kategori" id="id_kategori" hidden>
+                            <div class="form-group col-md-3 col-12">
+                                <label for="kode_kategori" class="form-label">Kode Kategori</label>
+                                <input type="text" name="kode_kategori" id="kode_kategori" class="form-control" required>
+                            </div>
                             <div class="form-group col-md-4 col-12">
                                 <label for="nama_kategori" class="form-label">Nama Kategori</label>
                                 <input type="text" name="nama_kategori" id="nama_kategori" class="form-control" required>
                             </div>
-                            <div class="form-group col-md-8 col-12">
+                            <div class="form-group col-md-5 col-12">
                                 <label for="keterangan_kategori" class="form-label">Keterangan</label>
                                 <input type="text" name="keterangan_kategori" id="keterangan_kategori" class="form-control" required>
                             </div>
@@ -120,17 +124,15 @@
 
         const setForm = (title, data) => {
             modal_form.querySelector('#title_form').innerHTML = `${title} data kategori`
-            const fields = ['id_kategori', 'nama_kategori', 'keterangan_kategori'];
+            const fields = ['id_kategori', 'kode_kategori', 'nama_kategori', 'keterangan_kategori'];
             fields.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
                 element.value = title === 'tambah' ? '' : data[i];
             })
-
             if (title === 'tambah') {
                 modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/insert") ?>');
                 btn_submit.innerHTML = 'Simpan';
             }
-
             if (title === 'edit') {
                 modal_form.querySelector('form').setAttribute('action', '<?= base_url("kategori/edit") ?>');
                 btn_submit.innerHTML = 'Edit';

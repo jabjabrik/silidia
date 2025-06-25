@@ -53,6 +53,7 @@
                                         <thead>
                                             <tr class="text-center">
                                                 <th>No</th>
+                                                <th>Kode</th>
                                                 <th>Nama Dokumen</th>
                                                 <th>Kategori</th>
                                                 <th>Sub Kategori</th>
@@ -69,6 +70,7 @@
                                             <?php foreach ($data_result as $item) : ?>
                                                 <tr>
                                                     <td><?= $no ?></td>
+                                                    <td><span><?= $item->kode_arsip; ?></span></td>
                                                     <td style="white-space: wrap">
                                                         <span>
                                                             <?= strlen($item->nama_dokumen) > 35 ?
@@ -99,7 +101,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                                            <?php $params = "[`$item->id_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`, `$item->file_path`]"; ?>
+                                                            <?php $params = "[`$item->id_arsip`,`$item->kode_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`, `$item->file_path`]"; ?>
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
@@ -161,6 +163,10 @@
                             <input name="id_user" id="id_user" hidden value="<?= $id_user ?>">
                             <input name="id_arsip" id="id_arsip" hidden>
                             <div class="form-group col-12">
+                                <label for="kode_arsip" class="form-label">Kode</label>
+                                <input type="text" name="kode_arsip" id="kode_arsip" class="form-control" required>
+                            </div>
+                            <div class="form-group col-12">
                                 <label for="nama_dokumen" class="form-label">Nama Dokumen</label>
                                 <input type="text" name="nama_dokumen" id="nama_dokumen" class="form-control" required>
                             </div>
@@ -169,7 +175,7 @@
                                 <select class="form-select" name="id_sub_kategori" id="id_sub_kategori" required>
                                     <option value="" selected>-</option>
                                     <?php foreach ($kategori as $item): ?>
-                                        <option value="<?= $item->id_sub_kategori ?>"><?= "$item->nama_kategori | $item->nama_sub_kategori" ?></option>
+                                        <option value="<?= $item->id_sub_kategori ?>"><?= "$item->kode_kategori $item->nama_kategori | $item->nama_sub_kategori" ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -226,7 +232,7 @@
         const setForm = (title, data) => {
             modal_form.querySelector('#title_form').innerHTML = `${title} data arsip`
 
-            const field = ['id_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi'];
+            const field = ['id_arsip', 'kode_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi'];
             field.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
 
@@ -251,7 +257,7 @@
                 section_dokumen.setAttribute('hidden', '')
                 btn_submit.setAttribute('hidden', '')
                 view_file.removeAttribute('hidden')
-                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[4]}`)
+                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[5]}`)
             }
 
             if (title === 'tambah') {
