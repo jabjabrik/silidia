@@ -17,7 +17,7 @@
             <main class="content pt-4 pb-0">
                 <div class="container-fluid p-0">
                     <h1 class="h3 mb-3 text-capitalize"><i class="bi bi-tag"></i> Halaman Manajemen Kategori</h1>
-                    <?php if ($this->session->userdata('role') == 'validator'): ?>
+                    <?php if ($role == 'validator' || $role == 'admin'): ?>
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('tambah')">
                             <i class="bi bi-plus-circle"></i> Tambah
                         </button>
@@ -36,7 +36,7 @@
                                                 <th>Kode</th>
                                                 <th>Nama kategori</th>
                                                 <th>Keterangan_kategori</th>
-                                                <?php if ($this->session->userdata('role') == 'validator'): ?>
+                                                <?php if ($role == 'validator' || $role == 'admin'): ?>
                                                     <th>Aksi</th>
                                                 <?php endif; ?>
                                             </tr>
@@ -49,7 +49,7 @@
                                                     <td><?= $item->kode_kategori ?></td>
                                                     <td><?= $item->nama_kategori ?></td>
                                                     <td style="white-space: wrap;"><?= $item->keterangan_kategori ?></td>
-                                                    <?php if ($this->session->userdata('role') == 'validator'): ?>
+                                                    <?php if ($role == 'validator' || $role == 'admin'): ?>
                                                         <td>
                                                             <?php $params = "[`$item->id_kategori`,`$item->kode_kategori`,`$item->nama_kategori`,`$item->keterangan_kategori`]" ?>
                                                             <div class="btn-group btn-group-sm" role="group">

@@ -60,9 +60,7 @@
                                                 <th>Tanggal</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
-                                                <?php if ($session_role == 'validator'): ?>
-                                                    <th class="no-sort">Validasi</th>
-                                                <?php endif ?>
+                                                <th class="no-sort">Validasi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -119,8 +117,13 @@
                                                             <?php endif ?>
                                                         </div>
                                                     </td>
-                                                    <?php if ($session_role == 'validator'): ?>
-                                                        <td class="text-center">
+                                                    <td class="text-center">
+                                                        <?php if ($item->status_validasi == "ditolak"): ?>
+                                                            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_pesan" onclick="form_pesan('<?= $item->pesan_penolakan ?>')">
+                                                                <i class="bi bi-bell-fill"></i>
+                                                            </button>
+                                                        <?php endif ?>
+                                                        <?php if ($session_role == 'validator' || $session_role == 'admin'): ?>
                                                             <?php if ($item->status_validasi != "proses"): ?>
                                                                 <button type="button" id="btn_cancel" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
                                                                     <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" data-bs-title="Membatalkan validasi"></i>
@@ -133,8 +136,8 @@
                                                                     <i class="bi bi-check2-bi bi-x-circle" data-bs-toggle="tooltip" data-bs-title="Tolak data"></i>
                                                                 </button>
                                                             <?php endif ?>
-                                                        </td>
-                                                    <?php endif ?>
+                                                        <?php endif ?>
+                                                    </td>
                                                 </tr>
                                                 <?php $no++ ?>
                                             <?php endforeach; ?>
@@ -221,6 +224,23 @@
     </div>
     <!-- End Modal Validasi -->
 
+    <!-- Modal Pesan -->
+    <div class="modal fade" id="modal_pesan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Pesan Penolakan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Pesan -->
+
     <!-- Script Modal Form -->
     <script>
         const modal_form = document.querySelector('#modal_form');
@@ -271,6 +291,15 @@
                 dokumen.removeAttribute('required');
                 btn_submit.innerHTML = 'Edit';
             }
+        }
+
+        const form_pesan = (msg) => {
+            const modalPenolakan = document.querySelector('#modal_pesan');
+            const modalTitle = modalPenolakan.querySelector('.modal-title');
+            const modalBody = modalPenolakan.querySelector('.modal-body');
+
+            modalBody.innerHTML = `<p>${msg}</p>`;
+
         }
     </script>
     <!-- End Script Modal Form -->

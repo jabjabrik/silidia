@@ -14,6 +14,18 @@ class Dashboard_model extends CI_Model
 		return $result;
 	}
 
+	public function get_total_validasi($role)
+	{
+		$query = "SELECT 
+		SUM(CASE WHEN status_validasi = 'proses' THEN 1 ELSE 0 END) AS total_proses,
+		SUM(CASE WHEN status_validasi = 'tervalidasi' THEN 1 ELSE 0 END) AS total_tervalidasi,
+		SUM(CASE WHEN status_validasi = 'ditolak' THEN 1 ELSE 0 END) AS total_ditolak
+		FROM arsip
+		JOIN user ON arsip.id_user = user.id_user
+		WHERE user.role = '$role'";
+		return $this->db->query($query)->row();
+	}
+
 
 	public function get_total_sub_kategori_arsip($sub_role = null): array
 	{

@@ -65,6 +65,16 @@
             <li class="sidebar-header">
                 Akun
             </li>
+            <li class="sidebar-item <?= $title == 'Setting User' ? 'active' : '' ?>">
+                <a class="sidebar-link" href="<?= base_url('akun'); ?>">
+                    <i class="align-middle bi bi-person-fill-gear"></i> <span class="align-middle">Setting User</span>
+                </a>
+            </li>
+            <li class="sidebar-item <?= $title == 'Ganti Password' ? 'active' : '' ?>">
+                <a class="sidebar-link" href="<?= base_url('akun/password'); ?>">
+                    <i class="align-middle" data-feather="lock"></i> <span class="align-middle">Ganti Password</span>
+                </a>
+            </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" data-bs-toggle="modal" data-bs-target="#logout_modal">
                     <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Logout</span>
