@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2025 at 07:18 AM
+-- Generation Time: Jul 09, 2025 at 09:53 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.3.33
 
@@ -35,7 +35,11 @@ CREATE TABLE `arsip` (
   `nama_dokumen` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `file_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tanggal_retensi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_retensi` enum('permanen','musnah') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `file_ba` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status_validasi` enum('proses','tervalidasi','ditolak') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'proses',
+  `pesan_penolakan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -44,56 +48,56 @@ CREATE TABLE `arsip` (
 -- Dumping data for table `arsip`
 --
 
-INSERT INTO `arsip` (`id_arsip`, `kode_arsip`, `id_user`, `id_sub_kategori`, `nama_dokumen`, `deskripsi`, `file_path`, `status_validasi`, `created_at`, `updated_at`) VALUES
-(1, '0677', 4, 2, 'SPJ Proyek Pembangunan Ruang Kelas Pembangunan Ruang', 'Surat Pertanggungjawaban atas pengeluaran untuk proyek pembangunan ruang kelas baru di SDN 1 Wonoasih, dengan total biaya sebesar Rp 50.000.000 yang dilaksanakan pada bulan Agustus 2024.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(2, '0993', 3, 5, 'SPJ Seminar Nasional Technology 2024', 'Surat Pertanggungjawaban untuk seminar nasional tentang teknologi yang diselenggarakan pada tanggal 20 Oktober 2024, mencakup semua biaya pendaftaran, penginapan, dan materi seminar.', 'file.pdf', 'tervalidasi', '2022-12-05 08:23:49', '2025-06-25 05:17:30'),
-(3, '0850', 5, 1, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban untuk biaya transportasi rapat mingguan yang diadakan setiap hari Senin, mencakup biaya taksi dan bensin selama bulan September 2024.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(4, '0080', 6, 7, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban atas pembelian alat tulis kantor untuk keperluan administrasi, termasuk daftar barang, jumlah pengeluaran, dan tanggal pembelian pada bulan Oktober 2024.', 'file.pdf', 'proses', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(5, '0741', 7, 3, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban terkait pelaksanaan pelatihan manajemen, mencakup biaya konsumsi, penginapan, dan materi pelatihan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(6, '0201', 8, 6, 'SPJ Proyek Pembangunan Ruang Kelas', 'Surat Pertanggungjawaban untuk pembangunan ruang kelas baru, meliputi biaya material, upah pekerja, dan pengawasan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(7, '0575', 3, 4, 'SPJ Seminar Nasional Teknologi 2024', 'Surat Pertanggungjawaban untuk seminar nasional bidang teknologi, mencakup biaya pendaftaran, akomodasi, dan perlengkapan.', 'file.pdf', 'ditolak', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(8, '0908', 3, 4, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban terkait biaya transportasi untuk menghadiri rapat mingguan selama bulan berjalan.', 'file.pdf', 'ditolak', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(9, '0751', 3, 1, 'SPJ Pengeluaran Kegiatan Pendidikan 2024', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan pendidikan, seperti pelatihan guru dan workshop siswa.', 'file.pdf', 'ditolak', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(10, '0953', 3, 2, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban terkait pembelian alat tulis dan perlengkapan kantor untuk menunjang aktivitas administrasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(11, '0965', 3, 6, 'SPJ Biaya Kegiatan Sosialisasi Desa', 'Surat Pertanggungjawaban untuk kegiatan sosialisasi program pemerintah kepada masyarakat desa, termasuk biaya konsumsi dan transportasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(12, '0295', 3, 4, 'SPJ Proyek Renovasi Gedung Kantor', 'Surat Pertanggungjawaban atas pengeluaran untuk renovasi gedung kantor, meliputi perbaikan atap, pengecatan, dan pemasangan listrik.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(13, '0165', 5, 5, 'SPJ Kegiatan Rapat Koordinasi 2024', 'Surat Pertanggungjawaban terkait biaya rapat koordinasi antar instansi, termasuk sewa ruang rapat dan konsumsi peserta.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(14, '0052', 4, 3, 'SPJ Pengeluaran Kegiatan Seminar Nasional', 'Surat Pertanggungjawaban atas pengeluaran untuk seminar nasional, mencakup biaya pembicara, sertifikat, dan konsumsi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(15, '0239', 3, 1, 'SPJ Pengadaan Barang Proyek Pembangunan', 'Surat Pertanggungjawaban untuk pengadaan barang yang diperlukan dalam pelaksanaan proyek pembangunan tertentu.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(16, '0130', 4, 2, 'SPJ Kegiatan Workshop Kepemimpinan 2024', 'Surat Pertanggungjawaban untuk kegiatan workshop kepemimpinan, termasuk biaya pelatihan, alat peraga, dan sertifikat.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(17, '0924', 5, 6, 'SPJ Biaya Kegiatan Pemberdayaan Masyarakat', 'Surat Pertanggungjawaban terkait biaya kegiatan pemberdayaan masyarakat, seperti pelatihan keterampilan dan bantuan sosial.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(18, '0682', 4, 5, 'SPJ Pembayaran Gaji Pegawai Januari 2024', 'Surat Pertanggungjawaban untuk pembayaran gaji pegawai selama bulan Januari 2024, termasuk rincian pengeluaran.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(19, '0741', 3, 4, 'SPJ Pengeluaran Rapat Evaluasi Proyek', 'Surat Pertanggungjawaban untuk biaya rapat evaluasi proyek, mencakup sewa ruang, konsumsi, dan transportasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(20, '0481', 4, 3, 'SPJ Biaya Pembangunan Infrastruktur Jalan', 'Surat Pertanggungjawaban atas pengeluaran dana untuk pembangunan jalan, meliputi biaya material dan pekerja.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(21, '0853', 3, 1, 'SPJ Proyek Pembangunan Fasilitas Umum', 'Surat Pertanggungjawaban untuk pembangunan fasilitas umum, seperti taman atau tempat ibadah, mencakup seluruh biaya yang dikeluarkan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(22, '0474', 3, 2, 'SPJ Biaya Operasional Kegiatan Penelitian', 'Surat Pertanggungjawaban untuk biaya operasional kegiatan penelitian, termasuk alat penelitian, perjalanan, dan honorarium.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(23, '0536', 3, 3, 'SPJ Pembelian Peralatan Kegiatan Pelatihan', 'Surat Pertanggungjawaban untuk pembelian peralatan yang digunakan dalam kegiatan pelatihan, seperti laptop dan proyektor.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(24, '0466', 3, 4, 'SPJ Laporan Pengeluaran Dana Kegiatan Rutin', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan rutin organisasi, seperti operasional harian dan administrasi.', 'file.pdf', 'proses', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(25, '0551', 9, 1, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban untuk kegiatan pelatihan manajemen yang dilaksanakan pada tanggal 15-16 September 2024, mencakup biaya penginapan, transportasi, dan konsumsi peserta.', 'file.pdf', 'tervalidasi', '2023-12-05 08:23:49', '2025-06-25 05:17:30'),
-(26, '0698', 10, 2, 'SPJ Proyek Pembangunan Ruang Kelas Pembangunan Ruang', 'Surat Pertanggungjawaban atas pengeluaran untuk proyek pembangunan ruang kelas baru di SDN 1 Wonoasih, dengan total biaya sebesar Rp 50.000.000 yang dilaksanakan pada bulan Agustus 2024.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(27, '0575', 9, 2, 'SPJ Seminar Nasional Technology 2024', 'Surat Pertanggungjawaban untuk seminar nasional tentang teknologi yang diselenggarakan pada tanggal 20 Oktober 2024, mencakup semua biaya pendaftaran, penginapan, dan materi seminar.', 'file.pdf', 'tervalidasi', '2022-12-05 08:23:49', '2025-06-25 05:17:30'),
-(28, '0346', 11, 1, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban untuk biaya transportasi rapat mingguan yang diadakan setiap hari Senin, mencakup biaya taksi dan bensin selama bulan September 2024.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(29, '0726', 12, 1, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban atas pembelian alat tulis kantor untuk keperluan administrasi, termasuk daftar barang, jumlah pengeluaran, dan tanggal pembelian pada bulan Oktober 2024.', 'file.pdf', 'proses', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(30, '0602', 13, 1, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban terkait pelaksanaan pelatihan manajemen, mencakup biaya konsumsi, penginapan, dan materi pelatihan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(31, '0578', 14, 2, 'SPJ Proyek Pembangunan Ruang Kelas', 'Surat Pertanggungjawaban untuk pembangunan ruang kelas baru, meliputi biaya material, upah pekerja, dan pengawasan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(32, '0597', 9, 3, 'SPJ Seminar Nasional Teknologi 2024', 'Surat Pertanggungjawaban untuk seminar nasional bidang teknologi, mencakup biaya pendaftaran, akomodasi, dan perlengkapan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(33, '0684', 9, 4, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban terkait biaya transportasi untuk menghadiri rapat mingguan selama bulan berjalan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(34, '0394', 9, 1, 'SPJ Pengeluaran Kegiatan Pendidikan 2024', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan pendidikan, seperti pelatihan guru dan workshop siswa.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(35, '0119', 9, 2, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban terkait pembelian alat tulis dan perlengkapan kantor untuk menunjang aktivitas administrasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(36, '0370', 9, 3, 'SPJ Biaya Kegiatan Sosialisasi Desa', 'Surat Pertanggungjawaban untuk kegiatan sosialisasi program pemerintah kepada masyarakat desa, termasuk biaya konsumsi dan transportasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(37, '0270', 9, 4, 'SPJ Proyek Renovasi Gedung Kantor', 'Surat Pertanggungjawaban atas pengeluaran untuk renovasi gedung kantor, meliputi perbaikan atap, pengecatan, dan pemasangan listrik.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(38, '0007', 11, 1, 'SPJ Kegiatan Rapat Koordinasi 2024', 'Surat Pertanggungjawaban terkait biaya rapat koordinasi antar instansi, termasuk sewa ruang rapat dan konsumsi peserta.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(39, '0617', 12, 1, 'SPJ Pengeluaran Kegiatan Seminar Nasional', 'Surat Pertanggungjawaban atas pengeluaran untuk seminar nasional, mencakup biaya pembicara, sertifikat, dan konsumsi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(40, '0571', 9, 1, 'SPJ Pengadaan Barang Proyek Pembangunan', 'Surat Pertanggungjawaban untuk pengadaan barang yang diperlukan dalam pelaksanaan proyek pembangunan tertentu.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(41, '0344', 10, 1, 'SPJ Kegiatan Workshop Kepemimpinan 2024', 'Surat Pertanggungjawaban untuk kegiatan workshop kepemimpinan, termasuk biaya pelatihan, alat peraga, dan sertifikat.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(42, '0466', 10, 1, 'SPJ Biaya Kegiatan Pemberdayaan Masyarakat', 'Surat Pertanggungjawaban terkait biaya kegiatan pemberdayaan masyarakat, seperti pelatihan keterampilan dan bantuan sosial.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(43, '0752', 10, 1, 'SPJ Pembayaran Gaji Pegawai Januari 2024', 'Surat Pertanggungjawaban untuk pembayaran gaji pegawai selama bulan Januari 2024, termasuk rincian pengeluaran.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(44, '0038', 9, 1, 'SPJ Pengeluaran Rapat Evaluasi Proyek', 'Surat Pertanggungjawaban untuk biaya rapat evaluasi proyek, mencakup sewa ruang, konsumsi, dan transportasi.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(45, '0760', 10, 1, 'SPJ Biaya Pembangunan Infrastruktur Jalan', 'Surat Pertanggungjawaban atas pengeluaran dana untuk pembangunan jalan, meliputi biaya material dan pekerja.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(46, '0677', 9, 1, 'SPJ Proyek Pembangunan Fasilitas Umum', 'Surat Pertanggungjawaban untuk pembangunan fasilitas umum, seperti taman atau tempat ibadah, mencakup seluruh biaya yang dikeluarkan.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(47, '0070', 9, 2, 'SPJ Biaya Operasional Kegiatan Penelitian', 'Surat Pertanggungjawaban untuk biaya operasional kegiatan penelitian, termasuk alat penelitian, perjalanan, dan honorarium.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(48, '0221', 9, 3, 'SPJ Pembelian Peralatan Kegiatan Pelatihan', 'Surat Pertanggungjawaban untuk pembelian peralatan yang digunakan dalam kegiatan pelatihan, seperti laptop dan proyektor.', 'file.pdf', 'tervalidasi', '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(49, '0738', 9, 4, 'SPJ Laporan Pengeluaran Dana Kegiatan Rutin', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan rutin organisasi, seperti operasional harian dan administrasi.', 'file.pdf', 'proses', '2025-06-25 05:17:30', '2025-06-25 05:17:30');
+INSERT INTO `arsip` (`id_arsip`, `kode_arsip`, `id_user`, `id_sub_kategori`, `nama_dokumen`, `deskripsi`, `file_path`, `tanggal_retensi`, `status_retensi`, `file_ba`, `status_validasi`, `pesan_penolakan`, `created_at`, `updated_at`) VALUES
+(1, '0795', 4, 2, 'SPJ Proyek Pembangunan Ruang Kelas Pembangunan Ruang', 'Surat Pertanggungjawaban atas pengeluaran untuk proyek pembangunan ruang kelas baru di SDN 1 Wonoasih, dengan total biaya sebesar Rp 50.000.000 yang dilaksanakan pada bulan Agustus 2024.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(2, '0172', 3, 5, 'SPJ Seminar Nasional Technology 2024', 'Surat Pertanggungjawaban untuk seminar nasional tentang teknologi yang diselenggarakan pada tanggal 20 Oktober 2024, mencakup semua biaya pendaftaran, penginapan, dan materi seminar.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2022-12-05 08:23:49', '2025-07-09 19:52:41'),
+(3, '0209', 5, 1, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban untuk biaya transportasi rapat mingguan yang diadakan setiap hari Senin, mencakup biaya taksi dan bensin selama bulan September 2024.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(4, '0642', 6, 7, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban atas pembelian alat tulis kantor untuk keperluan administrasi, termasuk daftar barang, jumlah pengeluaran, dan tanggal pembelian pada bulan Oktober 2024.', 'file.pdf', NULL, NULL, NULL, 'proses', NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(5, '0298', 7, 3, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban terkait pelaksanaan pelatihan manajemen, mencakup biaya konsumsi, penginapan, dan materi pelatihan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(6, '0785', 8, 6, 'SPJ Proyek Pembangunan Ruang Kelas', 'Surat Pertanggungjawaban untuk pembangunan ruang kelas baru, meliputi biaya material, upah pekerja, dan pengawasan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(7, '0345', 3, 4, 'SPJ Seminar Nasional Teknologi 2024', 'Surat Pertanggungjawaban untuk seminar nasional bidang teknologi, mencakup biaya pendaftaran, akomodasi, dan perlengkapan.', 'file.pdf', NULL, NULL, NULL, 'ditolak', 'dokumen arsip tidak sesuai', '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(8, '0401', 3, 4, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban terkait biaya transportasi untuk menghadiri rapat mingguan selama bulan berjalan.', 'file.pdf', NULL, NULL, NULL, 'ditolak', 'dokumen arsip tidak sesuai', '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(9, '0628', 3, 1, 'SPJ Pengeluaran Kegiatan Pendidikan 2024', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan pendidikan, seperti pelatihan guru dan workshop siswa.', 'file.pdf', NULL, NULL, NULL, 'ditolak', 'dokumen arsip tidak sesuai', '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(10, '0129', 3, 2, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban terkait pembelian alat tulis dan perlengkapan kantor untuk menunjang aktivitas administrasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(11, '0628', 3, 6, 'SPJ Biaya Kegiatan Sosialisasi Desa', 'Surat Pertanggungjawaban untuk kegiatan sosialisasi program pemerintah kepada masyarakat desa, termasuk biaya konsumsi dan transportasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(12, '0119', 3, 4, 'SPJ Proyek Renovasi Gedung Kantor', 'Surat Pertanggungjawaban atas pengeluaran untuk renovasi gedung kantor, meliputi perbaikan atap, pengecatan, dan pemasangan listrik.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(13, '0858', 5, 5, 'SPJ Kegiatan Rapat Koordinasi 2024', 'Surat Pertanggungjawaban terkait biaya rapat koordinasi antar instansi, termasuk sewa ruang rapat dan konsumsi peserta.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(14, '0236', 4, 3, 'SPJ Pengeluaran Kegiatan Seminar Nasional', 'Surat Pertanggungjawaban atas pengeluaran untuk seminar nasional, mencakup biaya pembicara, sertifikat, dan konsumsi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(15, '0830', 3, 1, 'SPJ Pengadaan Barang Proyek Pembangunan', 'Surat Pertanggungjawaban untuk pengadaan barang yang diperlukan dalam pelaksanaan proyek pembangunan tertentu.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(16, '0340', 4, 2, 'SPJ Kegiatan Workshop Kepemimpinan 2024', 'Surat Pertanggungjawaban untuk kegiatan workshop kepemimpinan, termasuk biaya pelatihan, alat peraga, dan sertifikat.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(17, '0435', 5, 6, 'SPJ Biaya Kegiatan Pemberdayaan Masyarakat', 'Surat Pertanggungjawaban terkait biaya kegiatan pemberdayaan masyarakat, seperti pelatihan keterampilan dan bantuan sosial.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(18, '0947', 4, 5, 'SPJ Pembayaran Gaji Pegawai Januari 2024', 'Surat Pertanggungjawaban untuk pembayaran gaji pegawai selama bulan Januari 2024, termasuk rincian pengeluaran.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(19, '0046', 3, 4, 'SPJ Pengeluaran Rapat Evaluasi Proyek', 'Surat Pertanggungjawaban untuk biaya rapat evaluasi proyek, mencakup sewa ruang, konsumsi, dan transportasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(20, '0147', 4, 3, 'SPJ Biaya Pembangunan Infrastruktur Jalan', 'Surat Pertanggungjawaban atas pengeluaran dana untuk pembangunan jalan, meliputi biaya material dan pekerja.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(21, '0297', 3, 1, 'SPJ Proyek Pembangunan Fasilitas Umum', 'Surat Pertanggungjawaban untuk pembangunan fasilitas umum, seperti taman atau tempat ibadah, mencakup seluruh biaya yang dikeluarkan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(22, '0848', 3, 2, 'SPJ Biaya Operasional Kegiatan Penelitian', 'Surat Pertanggungjawaban untuk biaya operasional kegiatan penelitian, termasuk alat penelitian, perjalanan, dan honorarium.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(23, '0925', 3, 3, 'SPJ Pembelian Peralatan Kegiatan Pelatihan', 'Surat Pertanggungjawaban untuk pembelian peralatan yang digunakan dalam kegiatan pelatihan, seperti laptop dan proyektor.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(24, '0404', 3, 4, 'SPJ Laporan Pengeluaran Dana Kegiatan Rutin', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan rutin organisasi, seperti operasional harian dan administrasi.', 'file.pdf', '2027-07-10', 'permanen', 'file_ba.pdf', 'proses', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(25, '0595', 9, 1, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban untuk kegiatan pelatihan manajemen yang dilaksanakan pada tanggal 15-16 September 2024, mencakup biaya penginapan, transportasi, dan konsumsi peserta.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2023-12-05 08:23:49', '2025-07-09 19:52:42'),
+(26, '0524', 10, 2, 'SPJ Proyek Pembangunan Ruang Kelas Pembangunan Ruang', 'Surat Pertanggungjawaban atas pengeluaran untuk proyek pembangunan ruang kelas baru di SDN 1 Wonoasih, dengan total biaya sebesar Rp 50.000.000 yang dilaksanakan pada bulan Agustus 2024.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(27, '0352', 9, 2, 'SPJ Seminar Nasional Technology 2024', 'Surat Pertanggungjawaban untuk seminar nasional tentang teknologi yang diselenggarakan pada tanggal 20 Oktober 2024, mencakup semua biaya pendaftaran, penginapan, dan materi seminar.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2022-12-05 08:23:49', '2025-07-09 19:52:42'),
+(28, '0754', 11, 1, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban untuk biaya transportasi rapat mingguan yang diadakan setiap hari Senin, mencakup biaya taksi dan bensin selama bulan September 2024.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(29, '0638', 12, 1, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban atas pembelian alat tulis kantor untuk keperluan administrasi, termasuk daftar barang, jumlah pengeluaran, dan tanggal pembelian pada bulan Oktober 2024.', 'file.pdf', NULL, NULL, NULL, 'proses', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(30, '0463', 13, 1, 'SPJ Kegiatan Pelatihan Manajemen', 'Surat Pertanggungjawaban terkait pelaksanaan pelatihan manajemen, mencakup biaya konsumsi, penginapan, dan materi pelatihan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(31, '0324', 14, 2, 'SPJ Proyek Pembangunan Ruang Kelas', 'Surat Pertanggungjawaban untuk pembangunan ruang kelas baru, meliputi biaya material, upah pekerja, dan pengawasan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(32, '0722', 9, 3, 'SPJ Seminar Nasional Teknologi 2024', 'Surat Pertanggungjawaban untuk seminar nasional bidang teknologi, mencakup biaya pendaftaran, akomodasi, dan perlengkapan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(33, '0246', 9, 4, 'SPJ Biaya Transportasi Rapat Mingguan', 'Surat Pertanggungjawaban terkait biaya transportasi untuk menghadiri rapat mingguan selama bulan berjalan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(34, '0467', 9, 1, 'SPJ Pengeluaran Kegiatan Pendidikan 2024', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan pendidikan, seperti pelatihan guru dan workshop siswa.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(35, '0099', 9, 2, 'SPJ Pembelian Alat Tulis Kantor', 'Surat Pertanggungjawaban terkait pembelian alat tulis dan perlengkapan kantor untuk menunjang aktivitas administrasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(36, '0485', 9, 3, 'SPJ Biaya Kegiatan Sosialisasi Desa', 'Surat Pertanggungjawaban untuk kegiatan sosialisasi program pemerintah kepada masyarakat desa, termasuk biaya konsumsi dan transportasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(37, '0459', 9, 4, 'SPJ Proyek Renovasi Gedung Kantor', 'Surat Pertanggungjawaban atas pengeluaran untuk renovasi gedung kantor, meliputi perbaikan atap, pengecatan, dan pemasangan listrik.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(38, '0530', 11, 1, 'SPJ Kegiatan Rapat Koordinasi 2024', 'Surat Pertanggungjawaban terkait biaya rapat koordinasi antar instansi, termasuk sewa ruang rapat dan konsumsi peserta.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(39, '0358', 12, 1, 'SPJ Pengeluaran Kegiatan Seminar Nasional', 'Surat Pertanggungjawaban atas pengeluaran untuk seminar nasional, mencakup biaya pembicara, sertifikat, dan konsumsi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(40, '0502', 9, 1, 'SPJ Pengadaan Barang Proyek Pembangunan', 'Surat Pertanggungjawaban untuk pengadaan barang yang diperlukan dalam pelaksanaan proyek pembangunan tertentu.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(41, '0251', 10, 1, 'SPJ Kegiatan Workshop Kepemimpinan 2024', 'Surat Pertanggungjawaban untuk kegiatan workshop kepemimpinan, termasuk biaya pelatihan, alat peraga, dan sertifikat.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(42, '0213', 10, 1, 'SPJ Biaya Kegiatan Pemberdayaan Masyarakat', 'Surat Pertanggungjawaban terkait biaya kegiatan pemberdayaan masyarakat, seperti pelatihan keterampilan dan bantuan sosial.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(43, '0532', 10, 1, 'SPJ Pembayaran Gaji Pegawai Januari 2024', 'Surat Pertanggungjawaban untuk pembayaran gaji pegawai selama bulan Januari 2024, termasuk rincian pengeluaran.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(44, '0015', 9, 1, 'SPJ Pengeluaran Rapat Evaluasi Proyek', 'Surat Pertanggungjawaban untuk biaya rapat evaluasi proyek, mencakup sewa ruang, konsumsi, dan transportasi.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(45, '0647', 10, 1, 'SPJ Biaya Pembangunan Infrastruktur Jalan', 'Surat Pertanggungjawaban atas pengeluaran dana untuk pembangunan jalan, meliputi biaya material dan pekerja.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(46, '0502', 9, 1, 'SPJ Proyek Pembangunan Fasilitas Umum', 'Surat Pertanggungjawaban untuk pembangunan fasilitas umum, seperti taman atau tempat ibadah, mencakup seluruh biaya yang dikeluarkan.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(47, '0578', 9, 2, 'SPJ Biaya Operasional Kegiatan Penelitian', 'Surat Pertanggungjawaban untuk biaya operasional kegiatan penelitian, termasuk alat penelitian, perjalanan, dan honorarium.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(48, '0850', 9, 3, 'SPJ Pembelian Peralatan Kegiatan Pelatihan', 'Surat Pertanggungjawaban untuk pembelian peralatan yang digunakan dalam kegiatan pelatihan, seperti laptop dan proyektor.', 'file.pdf', NULL, NULL, NULL, 'tervalidasi', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42'),
+(49, '0280', 9, 4, 'SPJ Laporan Pengeluaran Dana Kegiatan Rutin', 'Surat Pertanggungjawaban atas pengeluaran dana untuk kegiatan rutin organisasi, seperti operasional harian dan administrasi.', 'file.pdf', NULL, NULL, NULL, 'proses', NULL, '2025-07-09 19:52:42', '2025-07-09 19:52:42');
 
 -- --------------------------------------------------------
 
@@ -113,30 +117,11 @@ CREATE TABLE `kategori` (
 --
 
 INSERT INTO `kategori` (`id_kategori`, `kode_kategori`, `nama_kategori`, `keterangan_kategori`) VALUES
-(1, '0792', 'Perencanaan', 'Dokumen rencana program dan kegiatan'),
-(2, '0544', 'Keuangan', 'Dokumen pengelolaan anggaran dan transaksi'),
-(3, '0683', 'Pelaporan', 'Dokumen laporan hasil kegiatan organisasi'),
-(4, '0816', 'Kepegawaian', 'Dokumen data dan manajemen pegawai'),
-(5, '0777', 'SPJ', 'Surat Pertanggungjawaban berbagai kegiatan');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `migrations`
---
-
-CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `migrations`
---
-
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, 'silidia', 1);
+(1, '0763', 'Perencanaan', 'Dokumen rencana program dan kegiatan'),
+(2, '0150', 'Keuangan', 'Dokumen pengelolaan anggaran dan transaksi'),
+(3, '0280', 'Pelaporan', 'Dokumen laporan hasil kegiatan organisasi'),
+(4, '0096', 'Kepegawaian', 'Dokumen data dan manajemen pegawai'),
+(5, '0051', 'SPJ', 'Surat Pertanggungjawaban berbagai kegiatan');
 
 -- --------------------------------------------------------
 
@@ -189,20 +174,20 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama_user`, `username`, `password`, `role`, `sub_role`, `login_attempts`, `last_login_attempt`, `created_at`, `updated_at`) VALUES
-(1, 'admin wonoasih', 'admin_wonoasih', '$2y$12$ADpuUoFmmKfxN.Cw9X2ZGuuSR1JgtwZF00HhE/OTKCH7NduGg5aaa', 'admin', 'admin', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(2, 'wakil admin wonoasih', 'wamin_wonoasih', '$2y$12$7RMiPDDlbBGwNKCnS2QKTOww6NUqmahlHpgxaxwxgcRPMMQt2qrlq', 'validator', 'validator', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(3, 'seksi trantib', 'seksi_trantib', '$2y$12$ODA1UST7WPNimNgtcbT6E.Uow0h2AkqxGdJN5zvQCkPjTTcYlvDMy', 'kecamatan', 'seksi trantib', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(4, 'seksi pemmas', 'seksi_pemmas', '$2y$12$g2unf9DE8CwktG71cgGUB.fgGRHoIJOvZh6vGhO/7T7BIh7QFFG/6', 'kecamatan', 'seksi pemmas', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(5, 'seksi pemerintahan', 'seksi_pemerintahan', '$2y$12$Kp5P/jDY9jQyluNxKFQX.uS1coGnutSjQIBeKtZPrKriAb6rv2ssu', 'kecamatan', 'seksi pemerintahan', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(6, 'seksi pelayanan', 'seksi_pelayanan', '$2y$12$VUnXviYkE5DB551QzlISvOBJBD1ztFsdLtIVQvFUKHTv2BMhsTam6', 'kecamatan', 'seksi pelayanan', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(7, 'subbag tata usaha', 'tata_usaha', '$2y$12$vddQz0nXvNPGImyl1WHIHO.4lcHzqmy53X520SpSghqhGg.bMElH.', 'kecamatan', 'subbag tata usaha', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(8, 'subbag program keuangan', 'program_keuangan', '$2y$12$QT2.DcallfDA.FM1VUJv/uVM4wmDClG1t1GXc.iPuJxDv41j967Ea', 'kecamatan', 'subbag prog. keuangan', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(9, 'user wonoasih', 'kel_wonoasih', '$2y$12$3AFqW65FWl.U1xv3qpCKwOOCS7BlYZZtY0yoSXn8Ypu/L3LSq6G9y', 'kelurahan', 'wonoasih', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(10, 'user jrebengkidul', 'kel_jrebengkidul', '$2y$12$CkhcQopstbTJN7vHfE2HuuuAXNGP0X2cUQwYXdNiNhHN2hPYKGsTG', 'kelurahan', 'jrebengkidul', 0, NULL, '2025-06-25 05:17:29', '2025-06-25 05:17:29'),
-(11, 'user pakistaji', 'kel_pakistaji', '$2y$12$v1MIAFQ7vxsJMhvexz2l5eTzj.K6C5w2ve.7/4YFk5y6CHtMk1Kz.', 'kelurahan', 'pakistaji', 0, NULL, '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(12, 'user kedunggaleng', 'kel_kedunggaleng', '$2y$12$dbqviKTqhjr3Dk6yzRi/1.wieHuKf6wFOJPP1vf.Wld8c3TJGADQi', 'kelurahan', 'kedunggaleng', 0, NULL, '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(13, 'user kedungasem', 'kel_kedungasem', '$2y$12$FSyPPX2vNBm17OjE91yoAeRSHhxcMreRNeaYLCs7Cx9JTycIlZ8xq', 'kelurahan', 'kedungasem', 0, NULL, '2025-06-25 05:17:30', '2025-06-25 05:17:30'),
-(14, 'user sumbertaman', 'kel_sumbertaman', '$2y$12$y..VTuCU2pU4c1.3voIwfOotG6Z9C9AdX6ODNsUAiWYPNnAk1cZ2a', 'kelurahan', 'sumbertaman', 0, NULL, '2025-06-25 05:17:30', '2025-06-25 05:17:30');
+(1, 'admin wonoasih', 'admin_wonoasih', '$2y$12$0pdoibgg./L3JspVMxDwE.rrMZU7.q0GHXMTNUUpjim5HlZtZ8Zp.', 'admin', 'admin', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(2, 'wakil admin wonoasih', 'wamin_wonoasih', '$2y$12$HtCxIi.rWu/.iQkfiaX0seN7n/zqz51b8wa4g6FPvsJD0B8wSLuE6', 'validator', 'validator', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(3, 'seksi trantib', 'seksi_trantib', '$2y$12$nvlxACz2yZEWBeKq5o8LG.h7EMryA3zdJIQgscKptYDSF1.O1eNPe', 'kecamatan', 'seksi trantib', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(4, 'seksi pemmas', 'seksi_pemmas', '$2y$12$vjkfqafDUsgilQHGsZdE7O.yg/ors7nmFJroNmTv0w2CHceHJiZM.', 'kecamatan', 'seksi pemmas', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(5, 'seksi pemerintahan', 'seksi_pemerintahan', '$2y$12$CHqX/aQJ/SICZ4iO8nrPdu2Jo9GnupqxCD1yhWYX.e4XQlFlCoija', 'kecamatan', 'seksi pemerintahan', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(6, 'seksi pelayanan', 'seksi_pelayanan', '$2y$12$HPW3PQqOb5peEMfx24EVVeoCRRE7hphAI4kUBD89xuETAPjmFpdUC', 'kecamatan', 'seksi pelayanan', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(7, 'subbag tata usaha', 'tata_usaha', '$2y$12$oyLTHKoCquyEq63zzWFoaOrZGv5/ASczOvfhv257IuYiRKXgXbBLi', 'kecamatan', 'subbag tata usaha', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(8, 'subbag program keuangan', 'program_keuangan', '$2y$12$RKRQ03N1.pVBaKZpoFrcpeShttc4gMzSL1BgPZcP1yqklitJvgL3i', 'kecamatan', 'subbag prog. keuangan', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(9, 'user wonoasih', 'kel_wonoasih', '$2y$12$.8TMYGHArbOgwc.N1qbyCubmCZ76UQqeq.O4of3rX.SEf5Ig9lZ8K', 'kelurahan', 'wonoasih', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(10, 'user jrebengkidul', 'kel_jrebengkidul', '$2y$12$tRSlZdvddW1U1.WdWr5yR.LyfJxkpuhaYLNntM92BHHTp6Af9nCHy', 'kelurahan', 'jrebengkidul', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(11, 'user pakistaji', 'kel_pakistaji', '$2y$12$Btu2oNmCYEwtUE0pbogAb.i5xzcZxq9DWlgyMCyMruTSl6ZKb6Gzy', 'kelurahan', 'pakistaji', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(12, 'user kedunggaleng', 'kel_kedunggaleng', '$2y$12$9Sk9DqdTg6NyxMgROQts/us55AxCYK.LpMwYz6hm9879P3NtmdFVe', 'kelurahan', 'kedunggaleng', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(13, 'user kedungasem', 'kel_kedungasem', '$2y$12$Wx8rbGcLnAioxI3h07CZxu1GeCY0akSeYr/nCFxx.T2UuU57fMj3.', 'kelurahan', 'kedungasem', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41'),
+(14, 'user sumbertaman', 'kel_sumbertaman', '$2y$12$udkA6THgUXCv1H61TUTM0e44EzIDU8GQxJz0NM5fWu92XcOhPdx66', 'kelurahan', 'sumbertaman', 0, NULL, '2025-07-09 19:52:41', '2025-07-09 19:52:41');
 
 --
 -- Indexes for dumped tables
@@ -221,12 +206,6 @@ ALTER TABLE `arsip`
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id_kategori`);
-
---
--- Indexes for table `migrations`
---
-ALTER TABLE `migrations`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `sub_kategori`
@@ -257,12 +236,6 @@ ALTER TABLE `arsip`
 --
 ALTER TABLE `kategori`
   MODIFY `id_kategori` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `migrations`
---
-ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sub_kategori`

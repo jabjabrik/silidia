@@ -49,7 +49,7 @@
                                     <h5 class="card-title mb-0">Daftar Data Arsip</h5>
                                 </div>
                                 <div class="card-body" style="overflow: auto;">
-                                    <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: .95em;">
+                                    <table id="datatables" class="table table-striped table-bordered text-capitalize" style="white-space: nowrap; font-size: .9em;">
                                         <thead>
                                             <tr class="text-center">
                                                 <th>No</th>
@@ -58,6 +58,7 @@
                                                 <th>Kategori</th>
                                                 <th>Sub Kategori</th>
                                                 <th>Tanggal</th>
+                                                <th>Retensi</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
                                                 <th class="no-sort">Validasi</th>
@@ -71,8 +72,8 @@
                                                     <td><span><?= $item->kode_arsip; ?></span></td>
                                                     <td style="white-space: wrap">
                                                         <span>
-                                                            <?= strlen($item->nama_dokumen) > 35 ?
-                                                                substr($item->nama_dokumen, 0, 35) . "..."
+                                                            <?= strlen($item->nama_dokumen) > 15 ?
+                                                                substr($item->nama_dokumen, 0, 15) . "..."
                                                                 : $item->nama_dokumen;
                                                             ?>
                                                         </span>
@@ -80,6 +81,15 @@
                                                     <td><span><?= $item->nama_kategori; ?></span></td>
                                                     <td><span><?= $item->nama_sub_kategori; ?></span></td>
                                                     <td><span><?= date('d-m-Y', strtotime($item->created_at)); ?></span></td>
+                                                    <td>
+                                                        <span>
+                                                            <?= $item->tanggal_retensi ? date('d-m-Y', strtotime($item->tanggal_retensi)) : '-'; ?>
+                                                            <?php if ($item->file_ba): ?>
+                                                                | <a target="_blank" href="<?= base_url("dokumen/$item->file_ba"); ?>">BA</a>
+                                                            <?php endif; ?>
+                                                        </span>
+
+                                                    </td>
                                                     <td>
                                                         <?php if ($item->status_validasi == "proses"): ?>
                                                             <span class="badge bg-warning">
@@ -99,11 +109,11 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                                            <?php $params = "[`$item->id_arsip`,`$item->kode_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`, `$item->file_path`]"; ?>
+                                                            <?php $params = "[`$item->id_arsip`,`$item->kode_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`,`$item->tanggal_retensi`,`$item->status_retensi`,`$item->file_path`]"; ?>
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
-                                                            <?php if ($item->status_validasi != "tervalidasi"  && $session_role != 'admin'): ?>
+                                                            <?php if ($item->status_validasi != "tervalidasi"): ?>
                                                                 <?php if ($item->status_validasi != "ditolak"): ?>
                                                                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('edit', <?= $params ?>)">
                                                                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit data arsip"></i>
@@ -132,7 +142,7 @@
                                                                 <button type="button" id="btn_approve" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
                                                                     <i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-title="Memvalidasi data"></i>
                                                                 </button>
-                                                                <button type="button" id="btn_reject" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_validasi" data-id="<?= $item->id_arsip ?>">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal_reject" onclick="form_reject('<?= $item->id_arsip ?>')">
                                                                     <i class="bi bi-check2-bi bi-x-circle" data-bs-toggle="tooltip" data-bs-title="Tolak data"></i>
                                                                 </button>
                                                             <?php endif ?>
@@ -154,7 +164,7 @@
 
     <!-- Modal Form -->
     <div class="modal fade" id="modal_form" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-capitalize" id="title_form"></h1>
@@ -165,15 +175,15 @@
                         <div class="row g-3">
                             <input name="id_user" id="id_user" hidden value="<?= $id_user ?>">
                             <input name="id_arsip" id="id_arsip" hidden>
-                            <div class="form-group col-12">
+                            <div class="form-group col-md-6">
                                 <label for="kode_arsip" class="form-label">Kode</label>
                                 <input type="text" name="kode_arsip" id="kode_arsip" class="form-control" required>
                             </div>
-                            <div class="form-group col-12">
+                            <div class="form-group col-md-6">
                                 <label for="nama_dokumen" class="form-label">Nama Dokumen</label>
                                 <input type="text" name="nama_dokumen" id="nama_dokumen" class="form-control" required>
                             </div>
-                            <div class="form-group col-12">
+                            <div class="form-group col-md-6">
                                 <label for="id_sub_kategori" class="form-label">Kategori | Sub Kategori</label>
                                 <select class="form-select" name="id_sub_kategori" id="id_sub_kategori" required>
                                     <option value="" selected>-</option>
@@ -182,14 +192,32 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="form-group col-12">
+                            <div class="form-group col-md-6">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control" id="deskripsi" name="deskripsi" required rows="3"></textarea>
                             </div>
-                            <div id="section_dokumen" class="form-group col-12">
+                            <div id="section_dokumen" class="form-group col-md-6">
                                 <label for="dokumen" class="form-label">Unggah Dokumen</label>
                                 <input class="form-control" type="file" id="dokumen" name="dokumen" required accept="application/pdf">
                                 <div class="form-text mt-2">Upload file bertipe PDF | Maks 5mb</div>
+                            </div>
+                            <hr>
+                            <?php $is_admin_validator = in_array($session_role, ['admin', 'validator']) ? '' : 'disabled' ?>
+                            <div class="form-group col-4">
+                                <label for="tanggal_retensi" class="form-label">Tanggal Retensi</label>
+                                <input type="date" class="form-control" id="tanggal_retensi" name="tanggal_retensi" <?= $is_admin_validator ?>>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="status_retensi" class="form-label">Status Retensi</label>
+                                <select class="form-select" name="status_retensi" id="status_retensi" <?= $is_admin_validator ?>>
+                                    <option value="" selected>-</option>
+                                    <option value="permanen">Permanen</option>
+                                    <option value="musnah">Musnah</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-4">
+                                <label for="file_ba" class="form-label">File Berita Acara</label>
+                                <input type="file" class="form-control" id="file_ba" name="file_ba" <?= $is_admin_validator ?>>
                             </div>
                         </div>
                     </div>
@@ -224,6 +252,35 @@
     </div>
     <!-- End Modal Validasi -->
 
+    <!-- Modal Reject -->
+    <div class="modal fade" id="modal_reject" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-capitalize">Form Penolakan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" autocomplete="off" action="<?= base_url('arsip/tolak') ?>">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <input name="id_user" id="id_user" hidden value="<?= $id_user ?>">
+                            <input name="id_arsip" id="id_arsip" hidden>
+                            <div class="form-group col-12">
+                                <label for="pesan_penolakan" class="form-label">Pesan Penolakan</label>
+                                <input type="text" name="pesan_penolakan" id="pesan_penolakan" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-danger">Tolak</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Reject -->
+
     <!-- Modal Pesan -->
     <div class="modal fade" id="modal_pesan" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -252,9 +309,10 @@
         const setForm = (title, data) => {
             modal_form.querySelector('#title_form').innerHTML = `${title} data arsip`
 
-            const field = ['id_arsip', 'kode_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi'];
+            const field = ['id_arsip', 'kode_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi', 'tanggal_retensi', 'status_retensi'];
             field.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
+
 
                 if (title === 'detail') {
                     element.setAttribute('disabled', '');
@@ -277,7 +335,7 @@
                 section_dokumen.setAttribute('hidden', '')
                 btn_submit.setAttribute('hidden', '')
                 view_file.removeAttribute('hidden')
-                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[5]}`)
+                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[7]}`)
             }
 
             if (title === 'tambah') {
@@ -291,6 +349,11 @@
                 dokumen.removeAttribute('required');
                 btn_submit.innerHTML = 'Edit';
             }
+        }
+
+        const form_reject = (id_arsip) => {
+            const modal_reject = document.querySelector('#modal_reject');
+            modal_reject.querySelector('#id_arsip').value = id_arsip;
         }
 
         const form_pesan = (msg) => {
@@ -308,7 +371,7 @@
     <!-- Script Modal Validasi -->
     <script>
         const btn_approve = document.querySelectorAll('#btn_approve');
-        const btn_reject = document.querySelectorAll('#btn_reject');
+        // const btn_reject = document.querySelectorAll('#btn_reject');
         const btn_cancel = document.querySelectorAll('#btn_cancel');
         const modal_validasi = document.querySelector('#modal_validasi');
         const title = modal_validasi.querySelector('.modal-title');
@@ -326,16 +389,16 @@
             })
         })
 
-        btn_reject.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id_arsip = btn.getAttribute('data-id');
-                title.innerHTML = 'Validasi penolakan.'
-                body.innerHTML = 'Apakah Anda yakin ingin tolak Data Arsip?'
-                confirm.setAttribute('href', `<?= base_url("arsip/validate/ditolak/") ?>${id_arsip}/<?= $id_user ?>`)
-                confirm.innerHTML = 'Tolak'
-                confirm.setAttribute('class', 'btn btn-danger')
-            })
-        })
+        // btn_reject.forEach(btn => {
+        //     btn.addEventListener('click', () => {
+        //         const id_arsip = btn.getAttribute('data-id');
+        //         title.innerHTML = 'Validasi penolakan.'
+        //         body.innerHTML = 'Apakah Anda yakin ingin tolak Data Arsip?'
+        //         confirm.setAttribute('href', `<?= base_url("arsip/validate/ditolak/") ?>${id_arsip}/<?= $id_user ?>`)
+        //         confirm.innerHTML = 'Tolak'
+        //         confirm.setAttribute('class', 'btn btn-danger')
+        //     })
+        // })
 
         btn_cancel.forEach(btn => {
             btn.addEventListener('click', () => {

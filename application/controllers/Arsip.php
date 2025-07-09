@@ -83,14 +83,22 @@ class Arsip extends CI_Controller
 			'kode_arsip'  => trim($this->input->post('kode_arsip', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
+			'tanggal_retensi'    => trim($this->input->post('tanggal_retensi', true)),
+			'status_retensi'    => trim($this->input->post('status_retensi', true)),
 		];
 
 		$file_path = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip)->file_path;
 
 		$this->load->library('upload');
+
 		if ($_FILES['dokumen']['name']) {
 			unlink("./dokumen/$file_path");
 			$data['file_path'] = upload_file('dokumen');
+		}
+
+		if ($_FILES['file_ba']['name']) {
+			unlink("./dokumen/$file_path");
+			$data['file_ba'] = upload_file('file_ba');
 		}
 
 		$this->base_model->update('arsip', $data, $id_arsip);
@@ -145,6 +153,22 @@ class Arsip extends CI_Controller
 		$this->base_model->update('arsip', ['status_validasi' => $status_validasi], $id_arsip);
 
 		set_toasts("Status arsip berhasil diproses", "success");
+		redirect("arsip?id=$id_user", 'refresh');
+	}
+
+	public function tolak()
+	{
+		$id_arsip = $this->input->post('id_arsip');
+		$id_user = $this->input->post('id_user');
+
+		$data = [
+			'status_validasi' => 'ditolak',
+			'pesan_penolakan' => $this->input->post('pesan_penolakan'),
+		];
+
+		$this->base_model->update('arsip', $data, $id_arsip);
+
+		set_toasts("Data arsip berhasil ditolak", "success");
 		redirect("arsip?id=$id_user", 'refresh');
 	}
 
