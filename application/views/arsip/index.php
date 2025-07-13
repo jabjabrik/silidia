@@ -58,7 +58,6 @@
                                                 <th>Kategori</th>
                                                 <th>Sub Kategori</th>
                                                 <th>Tanggal</th>
-                                                <th>Retensi</th>
                                                 <th>Status</th>
                                                 <th class="no-sort">Dokumen</th>
                                                 <th class="no-sort">Validasi</th>
@@ -82,15 +81,6 @@
                                                     <td><span><?= $item->nama_sub_kategori; ?></span></td>
                                                     <td><span><?= date('d-m-Y', strtotime($item->created_at)); ?></span></td>
                                                     <td>
-                                                        <span>
-                                                            <?= $item->tanggal_retensi ? date('d-m-Y', strtotime($item->tanggal_retensi)) : '-'; ?>
-                                                            <?php if ($item->file_ba): ?>
-                                                                | <a target="_blank" href="<?= base_url("dokumen/$item->file_ba"); ?>">BA</a>
-                                                            <?php endif; ?>
-                                                        </span>
-
-                                                    </td>
-                                                    <td>
                                                         <?php if ($item->status_validasi == "proses"): ?>
                                                             <span class="badge bg-warning">
                                                                 <i style="cursor: pointer;" class="bi bi-clock text-white" data-bs-toggle="tooltip" data-bs-title="Menunggu validasi oleh validator"></i> Proses
@@ -109,7 +99,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                                            <?php $params = "[`$item->id_arsip`,`$item->kode_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`,`$item->tanggal_retensi`,`$item->status_retensi`,`$item->file_path`]"; ?>
+                                                            <?php $params = "[`$item->id_arsip`,`$item->kode_arsip`,`$item->id_sub_kategori`,`$item->nama_dokumen`,`$item->deskripsi`,`$item->file_path`]"; ?>
                                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_form" onclick="setForm('detail', <?= $params ?>)">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-title="Detail data arsip"></i>
                                                             </button>
@@ -201,24 +191,6 @@
                                 <input class="form-control" type="file" id="dokumen" name="dokumen" required accept="application/pdf">
                                 <div class="form-text mt-2">Upload file bertipe PDF | Maks 5mb</div>
                             </div>
-                            <hr>
-                            <?php $is_admin_validator = in_array($session_role, ['admin', 'validator']) ? '' : 'disabled' ?>
-                            <div class="form-group col-4">
-                                <label for="tanggal_retensi" class="form-label">Tanggal Retensi</label>
-                                <input type="date" class="form-control" id="tanggal_retensi" name="tanggal_retensi" <?= $is_admin_validator ?>>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="status_retensi" class="form-label">Status Retensi</label>
-                                <select class="form-select" name="status_retensi" id="status_retensi" <?= $is_admin_validator ?>>
-                                    <option value="" selected>-</option>
-                                    <option value="permanen">Permanen</option>
-                                    <option value="musnah">Musnah</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-4">
-                                <label for="file_ba" class="form-label">File Berita Acara</label>
-                                <input type="file" class="form-control" id="file_ba" name="file_ba" <?= $is_admin_validator ?>>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -309,7 +281,7 @@
         const setForm = (title, data) => {
             modal_form.querySelector('#title_form').innerHTML = `${title} data arsip`
 
-            const field = ['id_arsip', 'kode_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi', 'tanggal_retensi', 'status_retensi'];
+            const field = ['id_arsip', 'kode_arsip', 'id_sub_kategori', 'nama_dokumen', 'deskripsi'];
             field.forEach((e, i) => {
                 const element = modal_form.querySelector(`#${e}`);
 
@@ -335,7 +307,7 @@
                 section_dokumen.setAttribute('hidden', '')
                 btn_submit.setAttribute('hidden', '')
                 view_file.removeAttribute('hidden')
-                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[7]}`)
+                view_file.setAttribute('href', `<?= base_url('dokumen/'); ?>${data[5]}`)
             }
 
             if (title === 'tambah') {

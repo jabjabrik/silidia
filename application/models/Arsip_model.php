@@ -11,7 +11,8 @@ class Arsip_model extends CI_Model
         JOIN user ON arsip.id_user = user.id_user 
         JOIN sub_kategori ON arsip.id_sub_kategori = sub_kategori.id_sub_kategori
         JOIN kategori ON sub_kategori.id_kategori = kategori.id_kategori
-        WHERE user.id_user = '$id_user'
+        LEFT JOIN ba_detail ON arsip.id_arsip = ba_detail.id_arsip
+        WHERE user.id_user = '$id_user' AND ba_detail.id_ba_detail IS NULL
         ORDER BY CASE arsip.status_validasi
             WHEN 'proses' THEN 1
             WHEN 'ditolak' THEN 2

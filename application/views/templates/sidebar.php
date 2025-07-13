@@ -46,6 +46,11 @@
                         </li>
                     <?php endif; ?>
                 <?php endforeach; ?>
+                <li class="sidebar-item <?= $title == 'Retensi Arsip Kecamatan' ? 'active' : '' ?>">
+                    <a class="sidebar-link" href="<?= base_url('retensi?type=kecamatan'); ?>">
+                        <i class="bi bi-arrow-repeat"></i> <span class="align-middle">Retensi Arsip</span>
+                    </a>
+                </li>
             <?php endif; ?>
             <?php if ($this->session->userdata('role') != 'kecamatan'): ?>
                 <li class="sidebar-header">
@@ -61,6 +66,11 @@
                         </li>
                     <?php endif; ?>
                 <?php endforeach; ?>
+                <li class="sidebar-item <?= $title == 'Retensi Arsip Kelurahan' ? 'active' : '' ?>">
+                    <a class="sidebar-link" href="<?= base_url('retensi?type=kelurahan'); ?>">
+                        <i class="bi bi-arrow-repeat"></i> <span class="align-middle">Retensi Arsip</span>
+                    </a>
+                </li>
             <?php endif; ?>
             <li class="sidebar-header">
                 Akun

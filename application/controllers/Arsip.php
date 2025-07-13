@@ -83,8 +83,6 @@ class Arsip extends CI_Controller
 			'kode_arsip'  => trim($this->input->post('kode_arsip', true)),
 			'nama_dokumen' => trim($this->input->post('nama_dokumen', true)),
 			'deskripsi'    => trim($this->input->post('deskripsi', true)),
-			'tanggal_retensi'    => trim($this->input->post('tanggal_retensi', true)),
-			'status_retensi'    => trim($this->input->post('status_retensi', true)),
 		];
 
 		$file_path = $this->base_model->get_one_data_by('arsip', 'id_arsip', $id_arsip)->file_path;
@@ -94,11 +92,6 @@ class Arsip extends CI_Controller
 		if ($_FILES['dokumen']['name']) {
 			unlink("./dokumen/$file_path");
 			$data['file_path'] = upload_file('dokumen');
-		}
-
-		if ($_FILES['file_ba']['name']) {
-			unlink("./dokumen/$file_path");
-			$data['file_ba'] = upload_file('file_ba');
 		}
 
 		$this->base_model->update('arsip', $data, $id_arsip);
