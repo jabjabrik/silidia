@@ -12,7 +12,7 @@ class Retensi_model extends CI_Model
         LEFT JOIN ba_detail ON arsip.id_arsip = ba_detail.id_arsip
         LEFT JOIN ba ON ba_detail.id_ba = ba.id_ba
         WHERE user.role = '$type' AND arsip.status_validasi = 'tervalidasi'
-        ORDER BY arsip.tanggal_retensi IS NOT NULL DESC, arsip.tanggal_retensi, arsip.status_retensi, ba.kode_ba, user.sub_role";
+        ORDER BY user.sub_role, ba.kode_ba, arsip.tanggal_retensi,  user.sub_role";
         return $this->db->query($query)->result();
     }
 
@@ -27,6 +27,14 @@ class Retensi_model extends CI_Model
         JOIN user ON arsip.id_user = user.id_user 
         WHERE user.role = '$type'
         GROUP BY ba.kode_ba";
+        return $this->db->query($query)->result();
+    }
+
+    public function get_id_arsip(string $id_ba): array
+    {
+        $query = "SELECT ba_detail.id_arsip FROM ba
+        JOIN ba_detail ON ba.id_ba = ba_detail.id_ba
+        WHERE ba.id_ba = '$id_ba'";
         return $this->db->query($query)->result();
     }
 }

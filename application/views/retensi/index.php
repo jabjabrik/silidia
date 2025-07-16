@@ -63,7 +63,7 @@
                                                     <td><?= $no ?></td>
                                                     <?php if ($role == 'admin' || $role == 'validator'): ?>
                                                         <td>
-                                                            <?php if (!is_null($item->tanggal_retensi) && (strtotime($item->tanggal_retensi) <= now()) && $item->status_retensi == 'musnah' && is_null($item->kode_ba)): ?>
+                                                            <?php if (!is_null($item->tanggal_retensi) && (strtotime($item->tanggal_retensi) <= now()) && $item->status_retensi == 'sementara' && is_null($item->kode_ba)): ?>
                                                                 <input type="checkbox" class="row-checkbox" value="<?= $item->id_arsip ?>">
                                                             <?php else: ?>
                                                             <?php endif; ?>
@@ -78,7 +78,7 @@
                                                         <?php if (is_null($item->status_retensi)): ?>
                                                             <span>-</span>
                                                         <?php else: ?>
-                                                            <span class="badge <?= $item->status_retensi == 'musnah' ? 'bg-danger' : 'bg-warning' ?>">
+                                                            <span class="badge <?= $item->status_retensi == 'musnah' ? 'bg-danger' : ($item->status_retensi == 'permanen' ? 'bg-warning' : 'bg-secondary') ?>">
                                                                 <?= $item->status_retensi ?? '-' ?>
                                                             </span>
                                                         <?php endif; ?>
@@ -159,14 +159,14 @@
                             <input name="type" id="type" value="<?= $type ?>" hidden>
                             <div class="form-group col-12">
                                 <label for="tanggal_retensi" class="form-label">Tanggal Retensi</label>
-                                <input type="date" name="tanggal_retensi" id="tanggal_retensi" class="form-control" required>
+                                <input type="date" name="tanggal_retensi" id="tanggal_retensi" class="form-control">
                             </div>
                             <div id="section_dokumen" class="form-group col-12">
                                 <label for="status_retensi" class="form-label">Status Retensi</label>
                                 <select class="form-select" name="status_retensi" id="status_retensi" required>
                                     <option value="" selected>-</option>
                                     <option value="permanen">Permanen</option>
-                                    <option value="musnah">Musnah</option>
+                                    <option value="sementara">Sementara</option>
                                 </select>
                             </div>
                         </div>

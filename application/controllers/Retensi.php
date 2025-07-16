@@ -66,6 +66,8 @@ class Retensi extends CI_Controller
 				'id_ba' => $id_ba,
 				'id_arsip' => $item
 			];
+			$data_arsip = ['status_retensi' => 'musnah'];
+			$this->base_model->update('arsip', $data_arsip, $item);
 			$this->base_model->insert('ba_detail', $data_ba);
 		}
 
@@ -77,9 +79,10 @@ class Retensi extends CI_Controller
 	{
 		$id_arsip = $this->input->post('id_arsip');
 		$type = $this->input->post('type');
+		$tanggal_retensi = trim($this->input->post('tanggal_retensi', true));
 
 		$data = [
-			'tanggal_retensi'  => trim($this->input->post('tanggal_retensi', true)),
+			'tanggal_retensi'  => empty($tanggal_retensi) ? null : $tanggal_retensi,
 			'status_retensi'  => trim($this->input->post('status_retensi', true)),
 		];
 
@@ -98,6 +101,13 @@ class Retensi extends CI_Controller
 			set_toasts('Data Berita Acara tidak ditemukan.', 'danger');
 			redirect("retensi/musnah?type=$type", 'refresh');
 		}
+
+		$list_id_arsip = $this->retensi_model->get_id_arsip($id_ba);
+		foreach ($list_id_arsip as $item) {
+			$data_arsip = ['status_retensi' => 'sementara'];
+			$this->base_model->update('arsip', $data_arsip, $item->id_arsip);
+		}
+
 
 		unlink("dokumen/$ba->file_ba");
 
