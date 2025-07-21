@@ -20,9 +20,10 @@
                         <i class="bi bi-archive"></i>
                         <?= $title ?>
                     </h1>
-                    <div class="btn-group">
+                    <div class="btn-group btn-group-sm">
                         <a href="<?= base_url("retensi?type=$type"); ?>" class="btn btn-primary active" aria-current="page"><i class="bi bi-house"></i></a>
                         <a href="<?= base_url("retensi/musnah?type=$type"); ?>" class="btn btn-outline-primary">Pemusnahan</a>
+                        <a target="_blank" href="<?= base_url("retensi/export/$type"); ?>" class="btn btn-success ms-2"><i class="bi bi-flag"></i> Export Excel</a>
                         <button id="btn_musnah" hidden type="button" class="btn  btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#modal_form">
                             <i class="bi bi-plus-circle"></i> Musnahkan Arsip
                         </button>

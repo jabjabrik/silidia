@@ -108,13 +108,19 @@ class Retensi extends CI_Controller
 			$this->base_model->update('arsip', $data_arsip, $item->id_arsip);
 		}
 
-
 		unlink("dokumen/$ba->file_ba");
-
 
 		$this->db->delete('ba_detail', ['id_ba' => $id_ba]);
 		$this->db->delete('ba', ['id_ba' => $id_ba]);
 		set_toasts('Data Berita Acara berhasil dihapus', 'success');
 		redirect("retensi/musnah?type=$type", 'refresh');
+	}
+
+	public function export($type = null)
+	{
+		if (is_null($type)) redirect('dashboard');
+		$data['data_result'] = $this->retensi_model->get_arsip($type);
+		$data['title'] = "Laporan Retensi Arsip $type";
+		$this->load->view('retensi/report', $data);
 	}
 }
